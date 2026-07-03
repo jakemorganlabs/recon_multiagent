@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session S02 — Brief & Shared State · MICT-AGENT-004</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%2280%22 font-size=%2290%22>●</text></svg>">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #fafaf7;
+    --paper-2: #f0efea;
+    --paper-3: #e8e7e1;
+    --rule: #1a1a1a;
+    --rule-soft: rgba(10,10,10,0.12);
+    --rule-softer: rgba(10,10,10,0.07);
+    --dim: #555;
+    --dimmer: #888;
+    --done: #999;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 56px 40px 140px;
+    background-image: radial-gradient(circle at 1px 1px, rgba(10,10,10,0.04) 1px, transparent 0);
+    background-size: 24px 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+  a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule-soft); }
+  a:hover { border-bottom-color: var(--ink); }
+
+  /* MASTHEAD */
+  .masthead {
+    border-top: 2px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 24px 0 30px;
+    margin-bottom: 36px;
+  }
+  .masthead-meta {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 26px; color: var(--dim);
+  }
+  .doctype {
+    font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--dim); margin-bottom: 18px;
+  }
+  .doctype span { color: var(--ink); }
+  h1.title {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500;
+    font-size: clamp(40px, 6.5vw, 68px); line-height: 0.96;
+    letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 21px; color: var(--dim); margin-bottom: 26px; max-width: 60ch;
+  }
+  .id-grid {
+    display: grid; grid-template-columns: repeat(4, auto); gap: 28px;
+    font-size: 11px; letter-spacing: 0.05em; color: var(--dim);
+  }
+  .id-grid .k { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dimmer); display: block; margin-bottom: 3px; }
+  .id-grid .v { color: var(--ink); }
+
+  /* ABSTRACT */
+  .abstract {
+    font-family: 'Cormorant Garamond', serif; font-size: 18px;
+    line-height: 1.55; color: var(--dim); margin-bottom: 30px;
+    border-left: 2px solid var(--ink); padding: 4px 0 4px 24px;
+  }
+  .abstract strong { color: var(--ink); font-weight: 600; }
+
+  /* BOX */
+  .box {
+    border: 1px solid var(--rule); padding: 28px 30px 24px;
+    margin: 34px 0; position: relative; background: var(--paper-2);
+  }
+  .box::before {
+    content: attr(data-label); position: absolute; top: -8px; left: 22px;
+    background: var(--paper); padding: 0 12px;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink);
+  }
+  .box.plain { background: transparent; }
+
+  /* THESIS */
+  .thesis {
+    background: var(--ink); color: var(--paper); padding: 34px 34px 30px;
+    margin: 40px 0; position: relative;
+  }
+  .thesis::before {
+    content: attr(data-label); position: absolute; top: -8px; left: 24px;
+    background: var(--paper); color: var(--ink); padding: 0 12px;
+    font-size: 10px; letter-spacing: 0.2em; border: 1px solid var(--ink);
+  }
+  .thesis h3 { color: var(--paper); border: none; margin: 0 0 12px; }
+  .thesis p { color: rgba(250,250,247,0.82); font-size: 13px; }
+  .thesis p + p { margin-top: 12px; }
+  .thesis strong { color: var(--paper); }
+  .thesis em { color: rgba(250,250,247,0.92); }
+
+  /* HEADINGS */
+  h2 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 25px;
+    letter-spacing: -0.01em; margin: 52px 0 8px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule); display: flex; align-items: baseline; gap: 14px;
+  }
+  h2 .sec { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; color: var(--dim); letter-spacing: 0.05em; }
+  h3 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 19px;
+    margin: 32px 0 6px; display: flex; align-items: baseline; gap: 12px;
+  }
+  h3 .sec { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; color: var(--dimmer); letter-spacing: 0.05em; }
+  h4 {
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--dim); margin: 24px 0 8px; font-weight: 600;
+  }
+
+  /* PROSE */
+  p { font-size: 13px; margin: 12px 0; }
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+  .muted { color: var(--dim); }
+
+  ul, ol { margin: 12px 0 12px; padding-left: 0; list-style: none; }
+  li { font-size: 13px; margin-bottom: 9px; padding-left: 20px; position: relative; line-height: 1.55; }
+  ul > li::before { content: "—"; position: absolute; left: 0; color: var(--dimmer); }
+  ol { counter-reset: ol; }
+  ol > li { counter-increment: ol; }
+  ol > li::before { content: counter(ol) "."; position: absolute; left: 0; color: var(--dimmer); font-size: 11px; }
+  li strong { font-weight: 600; }
+
+  /* INLINE CODE */
+  code {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    background: var(--paper-2); padding: 1px 5px; border: 1px solid var(--rule-soft); white-space: nowrap;
+  }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 18px 0; }
+  th { text-align: left; font-size: 9px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--dim); font-weight: 500; border-bottom: 1px solid var(--rule); padding: 9px 10px; vertical-align: bottom; }
+  td { border-bottom: 1px solid var(--rule-softer); padding: 10px 10px; vertical-align: top; line-height: 1.5; }
+  tr:hover td { background: rgba(10,10,10,0.015); }
+  td.id, th.id { white-space: nowrap; font-weight: 600; width: 1%; }
+
+  /* SESSION-PLAN-SPECIFIC: position diagram — 7 cells */
+  .arc {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 0;
+    margin: 24px 0 18px; border: 1px solid var(--rule); background: var(--paper-2);
+  }
+  .arc .cell {
+    padding: 12px 8px 11px; border-right: 1px solid var(--rule-soft);
+    position: relative; text-align: left;
+  }
+  .arc .cell:last-child { border-right: none; }
+  .arc .cell .n { font-family: 'Cormorant Garamond', serif; font-size: 20px; line-height: 1; font-weight: 500; color: var(--dimmer); }
+  .arc .cell .lbl { font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); margin-top: 5px; }
+  .arc .cell .name { font-size: 10.5px; color: var(--ink); margin-top: 4px; line-height: 1.3; }
+  .arc .cell.done { background: var(--paper-3); }
+  .arc .cell.done .n, .arc .cell.done .name { color: var(--done); }
+  .arc .cell.current { background: var(--ink); color: var(--paper); }
+  .arc .cell.current .n { color: var(--paper); }
+  .arc .cell.current .lbl { color: rgba(250,250,247,0.7); }
+  .arc .cell.current .name { color: var(--paper); }
+  .arc .cell.future .n { color: var(--dimmer); }
+  .arc .cell.future .name { color: var(--dim); }
+
+  /* CHECKLIST */
+  .checklist li { padding-left: 26px; }
+  .checklist li::before {
+    content: "☐"; position: absolute; left: 0; color: var(--dimmer);
+    font-size: 13px; line-height: 1.5;
+  }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 80px; border-top: 1px solid var(--rule); padding-top: 24px;
+    text-align: center; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dimmer);
+  }
+  .footer em { display: block; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; text-transform: none; letter-spacing: 0; color: var(--dim); margin-top: 14px; }
+
+  /* PRINT */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 10.5pt; }
+    .thesis { background: #fff; color: #000; border: 2px solid #000; }
+    .thesis h3, .thesis p, .thesis strong, .thesis em { color: #000; }
+    .arc .cell.current { background: #fff; color: #000; border: 2px solid #000; }
+    .arc .cell.current .n, .arc .cell.current .name { color: #000; }
+    h2, h3 { break-after: avoid; }
+    table, .box, .thesis, .arc { break-inside: avoid; }
+    a { border: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ============================= MASTHEAD ============================= -->
+  <div class="masthead">
+    <div class="masthead-meta">
+      <span>jakemorganlabs · portfolio piece iv · build plan</span>
+      <span>controlled document</span>
+    </div>
+    <div class="doctype"><span>Session 2 of 7</span> &nbsp;·&nbsp; <span>Build Plan</span></div>
+    <h1 class="title">Brief & Shared State</h1>
+    <div class="subtitle">Piece I containment applied at the front door: a request becomes a validated brief or returns for clarification. Plus the n8n scaffold and the shared-state plumbing the agent sessions will hang from.</div>
+    <div class="id-grid">
+      <div><span class="k">Doc ID</span><span class="v">MICT-AGENT-004-S02</span></div>
+      <div><span class="k">Parent</span><span class="v">MICT-AGENT-004 v1.0</span></div>
+      <div><span class="k">Prereq</span><span class="v">S01 complete — schemas, migrations, verifiers in place</span></div>
+      <div><span class="k">Est. effort</span><span class="v">~3–4 hours focused</span></div>
+    </div>
+  </div>
+
+  <p class="abstract">Session S02 of the MICT-AGENT-004 build. This document defines the goal, scope, deliverables, build sequence, and acceptance criteria for a single working session. The seven-session arc — Core, Brief &amp; State, Search Agent, Analyst &amp; Coverage, Synthesis &amp; Grounding, Evals &amp; Cassettes, Deploy &amp; Demo — is shown below; each session ends with a clean handoff to the next. This is the portfolio's most ambitious piece before the capstone: three agents, bounded toolsets, a hard-capped coverage loop, deterministic grounding, and the no-action posture that keeps the worst possible outcome a dossier with explicit gaps — never a fabricated claim, never an action on the world.</p>
+
+  <!-- ============================= THESIS ============================= -->
+  <div class="thesis" data-label="Session Thesis">
+    <h3>Contain the request before letting any agent see it.</h3>
+    <p>The Piece I containment pattern, carried in verbatim: one bounded forced-tool extraction turns the raw request into a schema-valid Brief. An unresolvable target routes to <em>clarify</em>, not to a search. The agents never see the raw request — they only see the validated brief. That's not a UX nicety; it's the boundary that keeps a malformed or adversarial request from steering the downstream pipeline.</p>
+    <p>This is also the n8n setup session. The workflow scaffold, the authenticated request trigger, the shared-state writes, the idempotency check, the structured logger — all the orchestration plumbing the agent sessions hang from gets stood up here. By the end of the session, the spine exists. Adding agents in S03–S05 is a matter of <em>attaching them to the spine</em>, not building plumbing alongside them.</p>
+  </div>
+
+  <!-- ============================= POSITION ============================= -->
+  <h2 id="s0"><span class="sec">§0</span> Position in the Build Arc</h2>
+  <p class="muted">The seven-session build, with this session highlighted. Each predecessor must be complete before this one begins; each is a precondition for what follows.</p>
+  <div class="arc"><div class="cell done"><div class="n">S01</div><div class="name">Deterministic Core</div><div class="lbl">Complete</div></div><div class="cell current"><div class="n">S02</div><div class="name">Brief & Shared State</div><div class="lbl">You are here</div></div><div class="cell future"><div class="n">S03</div><div class="name">Search Agent & Web Tools</div><div class="lbl">Upcoming</div></div><div class="cell future"><div class="n">S04</div><div class="name">Analyst & Coverage Loop</div><div class="lbl">Upcoming</div></div><div class="cell future"><div class="n">S05</div><div class="name">Synthesis & Grounding Gate</div><div class="lbl">Upcoming</div></div><div class="cell future"><div class="n">S06</div><div class="name">Eval Harness & Fixtures</div><div class="lbl">Upcoming</div></div><div class="cell future"><div class="n">S07</div><div class="name">Dashboard, Cost, CI, Deploy</div><div class="lbl">Upcoming</div></div></div>
+  <p class="muted">Longest arc of the portfolio's pre-capstone pieces (PIPE-001 ran 5; RAG-002 ran 6; NODE-003 ran 4). The count reflects what's structurally bigger: <em>three agents</em> instead of one inference call, a <em>bounded coverage loop</em> with deterministic counter, a <em>recorded-fixture eval harness</em> (cassettes) so runs are reproducible without the live web. The deployment session is lighter than PIPE/RAG because n8n Cloud is managed — but the sessions before it have more to build.</p>
+
+  <!-- ============================= GOAL & EXIT ============================= -->
+  <h2 id="s1"><span class="sec">§1</span> Goal &amp; Exit Criteria</h2>
+  <p>By the end of this session the following are true. Anything short of this means the session is not done, regardless of how much code was written.</p>
+  <ul><li>n8n Cloud workflow scaffolded with an authenticated request trigger (HMAC, 5-minute replay window).</li><li>Request → Brief Normalizer (one forced-tool extraction) → Brief schema validation → shared-state write.</li><li>Unresolvable / ambiguous target → <code>status:'clarify'</code> response, no further processing (AC-1).</li><li>Idempotency on <code>request_hash</code>: same request posted twice returns the existing <code>run_id</code>, no duplicate run created.</li><li>Audit row written for every request (including <code>clarify</code> cases).</li><li>Structured logs emitted on each stage (carrying RAG-002 S05's logger discipline forward).</li></ul>
+
+  <!-- ============================= PREREQUISITES ============================= -->
+  <h2 id="s2"><span class="sec">§2</span> Prerequisites</h2>
+  <p class="muted">Conditions that must be in place before this session can usefully start.</p>
+  <ul><li>S01 deliverables on <code>main</code>; CI green.</li><li>n8n Cloud workspace available with workflow execution permissions.</li><li>Anthropic API key with forced-tool-use access.</li><li>Model decision locked. <strong>Recommend <code>claude-haiku-4-5</code></strong> for the brief extraction — it's a small, contained extraction; cheap haiku is the right tool. (The agents in S03–S05 may use a larger model.)</li></ul>
+
+  <!-- ============================= SCOPE ============================= -->
+  <h2 id="s3"><span class="sec">§3</span> Scope</h2>
+  <h4>In scope</h4>
+  <ul><li>n8n workflow with an authenticated request trigger.</li><li>HMAC verification (5-minute replay window, constant-time signature comparison — carry over the module from RAG-002 S05 if the conventions match).</li><li>Idempotency check: <code>SELECT * FROM run WHERE request_hash = $1</code>; if exists, return that <code>run_id</code> with 200.</li><li>Brief Normalizer: forced-tool call with <code>brief.schema.json</code> as the tool definition; <code>temperature 0</code>; pinned model.</li><li>One-shot repair loop on schema failure.</li><li>Clarification path: if the model emits <code>{status:'unresolvable'}</code> or target.name fails resolution, return <code>{status:'clarify', reason}</code> without further processing.</li><li>Shared-state writes: <code>run</code> row at start, <code>brief</code> row on successful extraction.</li><li>Audit row write at run start (always, regardless of outcome).</li><li>Structured logger module wired in.</li></ul>
+  <h4>Out of scope</h4>
+  <ul><li>Search Agent — S03.</li><li>Analyst, Synthesis — S04, S05.</li><li>Web tools — S03.</li><li>Coverage loop — S04.</li><li>Grounding gate — S05.</li></ul>
+
+  <!-- ============================= DELIVERABLES ============================= -->
+  <h2 id="s4"><span class="sec">§4</span> Deliverables</h2>
+  <p class="muted">Concrete artifacts produced by the session, each traceable back to the parent SRS section that motivates it.</p>
+  <table><thead><tr><th class='id'>Deliverable</th><th>Artifact</th><th>Traces to</th></tr></thead><tbody><tr><td class='id'>Workflow</td><td><code>workflows/recon.json</code> (n8n export, the spine)</td><td class='muted'>§8.2, §12.A steps 1–2</td></tr><tr><td class='id'>HMAC verifier</td><td>carried from RAG-002 S05 (or re-implemented)</td><td class='muted'>§16, NFR-SE-1</td></tr><tr><td class='id'>Idempotency guard</td><td><code>request_hash</code> lookup before extraction</td><td class='muted'>§11.1, AC-1</td></tr><tr><td class='id'>Brief Normalizer</td><td>forced-tool extraction node</td><td class='muted'>§10.2, §15, FR-BR-1..4</td></tr><tr><td class='id'>Repair loop</td><td>one-shot on schema failure</td><td class='muted'>FR-OR-5</td></tr><tr><td class='id'>Clarification path</td><td>early return with <code>status:'clarify'</code></td><td class='muted'>FR-BR-3</td></tr><tr><td class='id'>Shared-state writes</td><td>atomic <code>run</code> + <code>brief</code> insert</td><td class='muted'>§11.1, FR-ST-1</td></tr><tr><td class='id'>Audit writer</td><td>row at run start</td><td class='muted'>§10.12, FR-PS-1</td></tr><tr><td class='id'>Logger module</td><td><code>src/log.ts</code> wired into every stage</td><td class='muted'>§17.1, NFR-OB-1</td></tr><tr><td class='id'>Smoke test</td><td><code>scripts/brief_smoke.sh</code> — three cases</td><td class='muted'>AC-1</td></tr></tbody></table>
+
+  <!-- ============================= SEQUENCE ============================= -->
+  <h2 id="s5"><span class="sec">§5</span> Build Sequence</h2>
+  <p class="muted">An ordered set of steps. Each step is small enough to complete and verify before moving to the next; together they cover every deliverable.</p>
+  <ol><li>Set up the n8n Cloud workspace; create an empty workflow with a webhook (request) trigger.</li><li>Wire HMAC verification as the first node after the trigger. Reject unsigned or stale (>5 minute) requests with 401. Use constant-time comparison. Port the module from RAG-002 if the conventions match.</li><li>Add the idempotency check: a Code node that reads the request body, computes the <code>request_hash</code> via S01's <code>idempotency.ts</code>, and queries the <code>run</code> table. If found → return existing <code>run_id</code> + 200, stop further nodes. If not found → write the initial <code>run</code> row and proceed.</li><li>Add the Brief Normalizer: an LLM node configured for forced tool use with <code>brief.schema.json</code> as the tool's <code>input_schema</code>. <code>tool_choice: {type:'tool', name:'brief_extractor'}</code>. <code>temperature: 0</code>. Pinned model (<code>claude-haiku-4-5</code> recommended for cost on this contained extraction).</li><li>Wire one-shot repair: on schema validation failure, re-call once with the validation error + prior output appended to the system message. On second failure, set the run status to <code>failed</code>, write to DLQ, escalate.</li><li>Validate the extracted brief: if <code>target.name</code> is unresolvable OR required slots can't be inferred → set <code>status:'clarify'</code> on the run, write the reason to the audit row, return the clarify response. Otherwise → write the brief to the <code>brief</code> table.</li><li>Write the audit row at run start (every request gets one, even those that end in clarify).</li><li>Wire the structured logger into every stage. Mandatory fields per §17.1: <code>run_id</code>, <code>stage</code>, <code>status</code>, <code>latency_ms</code>, <code>model_id</code> (where applicable), <code>tokens</code> (where applicable).</li><li>Smoke test happy path: post a synthetic request for "Northwind Robotics"; verify a validated brief in <code>brief</code> table with the nine slots.</li><li>Smoke test idempotency: post the same request twice; verify only one <code>run</code> row created, second response returns the same <code>run_id</code>.</li><li>Smoke test clarification: post a deliberately ambiguous request (e.g., <code>{"target":"Apple"}</code> — which Apple?); verify <code>status:'clarify'</code> returned without further processing.</li><li>Smoke test repair loop: temporarily corrupt the schema or the prompt to force a single repair; verify exactly one re-call happens.</li></ol>
+
+  <!-- ============================= DEFINITION OF DONE ============================= -->
+  <h2 id="s6"><span class="sec">§6</span> Definition of Done</h2>
+  <p class="muted">The session ends when every box below is checked. These are stricter than the goal criteria — they include the housekeeping that makes the work durable.</p>
+  <div class="box plain" data-label="Done Means">
+    <ul class="checklist"><li>Workflow committed; HMAC enforcement verified by signed and unsigned requests.</li><li>Idempotency verified — same request twice yields one run row.</li><li>Brief Normalizer produces schema-valid briefs on happy-path requests.</li><li>Clarification path triggers on unresolvable targets without burning further tokens.</li><li>Audit row written for every request including clarify cases.</li><li>Structured log line per stage per request; mandatory fields populated.</li><li><code>brief</code> table populated correctly after a happy-path request.</li></ul>
+  </div>
+
+  <!-- ============================= RISKS ============================= -->
+  <h2 id="s7"><span class="sec">§7</span> Risks &amp; Pitfalls</h2>
+  <p class="muted">The mistakes that, in practice, derail sessions of this kind. Each is paired with a concrete mitigation rather than a general warning.</p>
+  <table><thead><tr><th class='id'>Risk</th><th>Mitigation</th></tr></thead><tbody><tr><td class='id'>Brief schema too restrictive for reasonable requests</td><td>A target with no website, a request with five focus areas, or a domain Anthropic's tokenizer treats oddly — any can break a brittle schema. Test against varied real-world request shapes; loosen the schema when correct, never silently relax validation.</td></tr><tr><td class='id'>Forced-tool config emits text instead of tool call</td><td>If <code>tool_choice</code> is wrong (defaults to <code>auto</code> on some configs), the model may emit prose instead of calling the tool. Pin <code>tool_choice: {type:'tool', name:...}</code> and verify with a known-good call.</td></tr><tr><td class='id'>HMAC complexity carried over wrong from RAG-002</td><td>n8n Cloud's request trigger has its own auth idioms — verify the signing format end-to-end with a curl from a different machine. Don't trust that the module ported cleanly without testing.</td></tr><tr><td class='id'>Idempotency canonicalization brittle</td><td>Whitespace, case, optional fields, trailing newlines — any of these in the canonicalization rule can let near-duplicate requests through. Document the rule; unit-test edge cases.</td></tr><tr><td class='id'>Clarification path swallows real errors</td><td>A schema failure from a malformed model output is different from an unresolvable target. Distinguish the two; route to clarify only for resolvability issues, not for model failures.</td></tr><tr><td class='id'>Logger noise overwhelms n8n Cloud retention</td><td>Every stage logging full input/output text can exhaust the log buffer fast. Truncate long fields (brief content, evidence text) to first 200 chars in logs.</td></tr></tbody></table>
+
+  <!-- ============================= HANDOFF ============================= -->
+  <h2 id="s8"><span class="sec">§8</span> Handoff to the Next Session</h2>
+  <p>S03 picks up a workflow that accepts requests and produces validated briefs. The next step is the Search Agent — the only agent in the system with web access — and the web tools it needs (search + fetch + safeguards). After S03 the system can gather evidence; the agents that <em>read</em> evidence come in S04 and S05.</p>
+
+  <!-- ============================= FOOTER ============================= -->
+  <div class="footer">
+    MICT-AGENT-004-S02 · Session 2 of 7 · Brief & Shared State · jakemorganlabs
+    <em>"The agents gather; the evidence grounds; the orchestrator bounds."</em>
+  </div>
+
+</div>
+</body>
+</html>

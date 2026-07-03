@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session S01 — Deterministic Core · MICT-AGENT-004</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%2280%22 font-size=%2290%22>●</text></svg>">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #fafaf7;
+    --paper-2: #f0efea;
+    --paper-3: #e8e7e1;
+    --rule: #1a1a1a;
+    --rule-soft: rgba(10,10,10,0.12);
+    --rule-softer: rgba(10,10,10,0.07);
+    --dim: #555;
+    --dimmer: #888;
+    --done: #999;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 56px 40px 140px;
+    background-image: radial-gradient(circle at 1px 1px, rgba(10,10,10,0.04) 1px, transparent 0);
+    background-size: 24px 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+  a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule-soft); }
+  a:hover { border-bottom-color: var(--ink); }
+
+  /* MASTHEAD */
+  .masthead {
+    border-top: 2px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 24px 0 30px;
+    margin-bottom: 36px;
+  }
+  .masthead-meta {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 26px; color: var(--dim);
+  }
+  .doctype {
+    font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--dim); margin-bottom: 18px;
+  }
+  .doctype span { color: var(--ink); }
+  h1.title {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500;
+    font-size: clamp(40px, 6.5vw, 68px); line-height: 0.96;
+    letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 21px; color: var(--dim); margin-bottom: 26px; max-width: 60ch;
+  }
+  .id-grid {
+    display: grid; grid-template-columns: repeat(4, auto); gap: 28px;
+    font-size: 11px; letter-spacing: 0.05em; color: var(--dim);
+  }
+  .id-grid .k { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dimmer); display: block; margin-bottom: 3px; }
+  .id-grid .v { color: var(--ink); }
+
+  /* ABSTRACT */
+  .abstract {
+    font-family: 'Cormorant Garamond', serif; font-size: 18px;
+    line-height: 1.55; color: var(--dim); margin-bottom: 30px;
+    border-left: 2px solid var(--ink); padding: 4px 0 4px 24px;
+  }
+  .abstract strong { color: var(--ink); font-weight: 600; }
+
+  /* BOX */
+  .box {
+    border: 1px solid var(--rule); padding: 28px 30px 24px;
+    margin: 34px 0; position: relative; background: var(--paper-2);
+  }
+  .box::before {
+    content: attr(data-label); position: absolute; top: -8px; left: 22px;
+    background: var(--paper); padding: 0 12px;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink);
+  }
+  .box.plain { background: transparent; }
+
+  /* THESIS */
+  .thesis {
+    background: var(--ink); color: var(--paper); padding: 34px 34px 30px;
+    margin: 40px 0; position: relative;
+  }
+  .thesis::before {
+    content: attr(data-label); position: absolute; top: -8px; left: 24px;
+    background: var(--paper); color: var(--ink); padding: 0 12px;
+    font-size: 10px; letter-spacing: 0.2em; border: 1px solid var(--ink);
+  }
+  .thesis h3 { color: var(--paper); border: none; margin: 0 0 12px; }
+  .thesis p { color: rgba(250,250,247,0.82); font-size: 13px; }
+  .thesis p + p { margin-top: 12px; }
+  .thesis strong { color: var(--paper); }
+  .thesis em { color: rgba(250,250,247,0.92); }
+
+  /* HEADINGS */
+  h2 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 25px;
+    letter-spacing: -0.01em; margin: 52px 0 8px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule); display: flex; align-items: baseline; gap: 14px;
+  }
+  h2 .sec { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; color: var(--dim); letter-spacing: 0.05em; }
+  h3 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 19px;
+    margin: 32px 0 6px; display: flex; align-items: baseline; gap: 12px;
+  }
+  h3 .sec { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; color: var(--dimmer); letter-spacing: 0.05em; }
+  h4 {
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--dim); margin: 24px 0 8px; font-weight: 600;
+  }
+
+  /* PROSE */
+  p { font-size: 13px; margin: 12px 0; }
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+  .muted { color: var(--dim); }
+
+  ul, ol { margin: 12px 0 12px; padding-left: 0; list-style: none; }
+  li { font-size: 13px; margin-bottom: 9px; padding-left: 20px; position: relative; line-height: 1.55; }
+  ul > li::before { content: "—"; position: absolute; left: 0; color: var(--dimmer); }
+  ol { counter-reset: ol; }
+  ol > li { counter-increment: ol; }
+  ol > li::before { content: counter(ol) "."; position: absolute; left: 0; color: var(--dimmer); font-size: 11px; }
+  li strong { font-weight: 600; }
+
+  /* INLINE CODE */
+  code {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    background: var(--paper-2); padding: 1px 5px; border: 1px solid var(--rule-soft); white-space: nowrap;
+  }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 18px 0; }
+  th { text-align: left; font-size: 9px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--dim); font-weight: 500; border-bottom: 1px solid var(--rule); padding: 9px 10px; vertical-align: bottom; }
+  td { border-bottom: 1px solid var(--rule-softer); padding: 10px 10px; vertical-align: top; line-height: 1.5; }
+  tr:hover td { background: rgba(10,10,10,0.015); }
+  td.id, th.id { white-space: nowrap; font-weight: 600; width: 1%; }
+
+  /* SESSION-PLAN-SPECIFIC: position diagram — 7 cells */
+  .arc {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 0;
+    margin: 24px 0 18px; border: 1px solid var(--rule); background: var(--paper-2);
+  }
+  .arc .cell {
+    padding: 12px 8px 11px; border-right: 1px solid var(--rule-soft);
+    position: relative; text-align: left;
+  }
+  .arc .cell:last-child { border-right: none; }
+  .arc .cell .n { font-family: 'Cormorant Garamond', serif; font-size: 20px; line-height: 1; font-weight: 500; color: var(--dimmer); }
+  .arc .cell .lbl { font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); margin-top: 5px; }
+  .arc .cell .name { font-size: 10.5px; color: var(--ink); margin-top: 4px; line-height: 1.3; }
+  .arc .cell.done { background: var(--paper-3); }
+  .arc .cell.done .n, .arc .cell.done .name { color: var(--done); }
+  .arc .cell.current { background: var(--ink); color: var(--paper); }
+  .arc .cell.current .n { color: var(--paper); }
+  .arc .cell.current .lbl { color: rgba(250,250,247,0.7); }
+  .arc .cell.current .name { color: var(--paper); }
+  .arc .cell.future .n { color: var(--dimmer); }
+  .arc .cell.future .name { color: var(--dim); }
+
+  /* CHECKLIST */
+  .checklist li { padding-left: 26px; }
+  .checklist li::before {
+    content: "☐"; position: absolute; left: 0; color: var(--dimmer);
+    font-size: 13px; line-height: 1.5;
+  }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 80px; border-top: 1px solid var(--rule); padding-top: 24px;
+    text-align: center; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dimmer);
+  }
+  .footer em { display: block; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; text-transform: none; letter-spacing: 0; color: var(--dim); margin-top: 14px; }
+
+  /* PRINT */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 10.5pt; }
+    .thesis { background: #fff; color: #000; border: 2px solid #000; }
+    .thesis h3, .thesis p, .thesis strong, .thesis em { color: #000; }
+    .arc .cell.current { background: #fff; color: #000; border: 2px solid #000; }
+    .arc .cell.current .n, .arc .cell.current .name { color: #000; }
+    h2, h3 { break-after: avoid; }
+    table, .box, .thesis, .arc { break-inside: avoid; }
+    a { border: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ============================= MASTHEAD ============================= -->
+  <div class="masthead">
+    <div class="masthead-meta">
+      <span>jakemorganlabs · portfolio piece iv · build plan</span>
+      <span>controlled document</span>
+    </div>
+    <div class="doctype"><span>Session 1 of 7</span> &nbsp;·&nbsp; <span>Build Plan</span></div>
+    <h1 class="title">Deterministic Core</h1>
+    <div class="subtitle">Four schemas, the three-hop citation chain verifier, the coverage decision, snippet normalization — every pure function the rest of the build leans on.</div>
+    <div class="id-grid">
+      <div><span class="k">Doc ID</span><span class="v">MICT-AGENT-004-S01</span></div>
+      <div><span class="k">Parent</span><span class="v">MICT-AGENT-004 v1.0</span></div>
+      <div><span class="k">Prereq</span><span class="v">None — foundation session</span></div>
+      <div><span class="k">Est. effort</span><span class="v">~4–5 hours focused</span></div>
+    </div>
+  </div>
+
+  <p class="abstract">Session S01 of the MICT-AGENT-004 build. This document defines the goal, scope, deliverables, build sequence, and acceptance criteria for a single working session. The seven-session arc — Core, Brief &amp; State, Search Agent, Analyst &amp; Coverage, Synthesis &amp; Grounding, Evals &amp; Cassettes, Deploy &amp; Demo — is shown below; each session ends with a clean handoff to the next. This is the portfolio's most ambitious piece before the capstone: three agents, bounded toolsets, a hard-capped coverage loop, deterministic grounding, and the no-action posture that keeps the worst possible outcome a dossier with explicit gaps — never a fabricated claim, never an action on the world.</p>
+
+  <!-- ============================= THESIS ============================= -->
+  <div class="thesis" data-label="Session Thesis">
+    <h3>The half that has no excuse to be wrong, before the agents enter.</h3>
+    <p>This piece has more schemas than any prior portfolio piece (four: Brief, EvidenceItem, Signal, Dossier) and a more complex deterministic backbone — a <strong>three-hop citation chain verifier</strong> (claim → signal → evidence → snippet present) versus the two-hop checks in RAG-002. Getting all of this right before any agent prompt is written is what keeps the agent sessions (S03–S05) focused on agents instead of debugging schema edges or verifier corner cases.</p>
+    <p>Same discipline as opened PIPE-001 and RAG-002: no model touches this session. Pure functions, unit-tested into submission, become the stable substrate the orchestration leans on. The coverage decision lives here too — the deterministic check the orchestrator will run after the Analyst to decide whether to loop. <em>The model never decides to loop</em>; this code does.</p>
+  </div>
+
+  <!-- ============================= POSITION ============================= -->
+  <h2 id="s0"><span class="sec">§0</span> Position in the Build Arc</h2>
+  <p class="muted">The seven-session build, with this session highlighted. Each predecessor must be complete before this one begins; each is a precondition for what follows.</p>
+  <div class="arc"><div class="cell current"><div class="n">S01</div><div class="name">Deterministic Core</div><div class="lbl">You are here</div></div><div class="cell future"><div class="n">S02</div><div class="name">Brief & Shared State</div><div class="lbl">Upcoming</div></div><div class="cell future"><div class="n">S03</div><div class="name">Search Agent & Web Tools</div><div class="lbl">Upcoming</div></div><div class="cell future"><div class="n">S04</div><div class="name">Analyst & Coverage Loop</div><div class="lbl">Upcoming</div></div><div class="cell future"><div class="n">S05</div><div class="name">Synthesis & Grounding Gate</div><div class="lbl">Upcoming</div></div><div class="cell future"><div class="n">S06</div><div class="name">Eval Harness & Fixtures</div><div class="lbl">Upcoming</div></div><div class="cell future"><div class="n">S07</div><div class="name">Dashboard, Cost, CI, Deploy</div><div class="lbl">Upcoming</div></div></div>
+  <p class="muted">Longest arc of the portfolio's pre-capstone pieces (PIPE-001 ran 5; RAG-002 ran 6; NODE-003 ran 4). The count reflects what's structurally bigger: <em>three agents</em> instead of one inference call, a <em>bounded coverage loop</em> with deterministic counter, a <em>recorded-fixture eval harness</em> (cassettes) so runs are reproducible without the live web. The deployment session is lighter than PIPE/RAG because n8n Cloud is managed — but the sessions before it have more to build.</p>
+
+  <!-- ============================= GOAL & EXIT ============================= -->
+  <h2 id="s1"><span class="sec">§1</span> Goal &amp; Exit Criteria</h2>
+  <p>By the end of this session the following are true. Anything short of this means the session is not done, regardless of how much code was written.</p>
+  <ul><li>Postgres migrations apply cleanly for eight tables (<code>run</code>, <code>brief</code>, <code>evidence</code>, <code>signal</code>, <code>tool_call</code>, <code>dossier</code>, <code>audit</code>, <code>dead_letter</code>). No <code>pgvector</code> — this piece does live web search, not embedding retrieval.</li><li>All four JSON Schemas validate cleanly with a draft-2020-12 validator.</li><li>Citation chain verifier is a <strong>pure function</strong>: given a dossier + signals + evidence, deterministically returns per-claim <code>{verified, recast_as_gap, reason}</code>.</li><li>Snippet normalization handles whitespace, NBSP, smart quotes, and Unicode NFC — shared between the citation verifier and (later) the grounding gate.</li><li>Coverage decision is a pure function over signals + brief slots returning <code>{action: loop|proceed, unfilled_required: [...]}</code>; tests cover all-filled, some-unfilled, cap-reached.</li><li>Idempotency key derivation produces stable hashes for canonicalized requests.</li><li>CI runs tests + schema validation on push; green on head.</li></ul>
+
+  <!-- ============================= PREREQUISITES ============================= -->
+  <h2 id="s2"><span class="sec">§2</span> Prerequisites</h2>
+  <p class="muted">Conditions that must be in place before this session can usefully start.</p>
+  <ul><li>Decision locked: language + framework (TypeScript/Node, matching PIPE/RAG/NODE for tooling parity).</li><li>Local Postgres reachable (Docker is fine). <strong>No <code>pgvector</code> needed</strong> — note this; it's a deliberate departure from RAG-002.</li><li>Empty Git repo at <code>github.com/jakemorganlabs/recon</code> with <code>main</code> branch protected.</li><li>Slot taxonomy reviewed against §11.2 of the SRS — the nine slots (<code>overview</code>, <code>products</code>, <code>funding</code>, <code>headcount</code>, <code>tech_stack</code>, <code>hiring</code>, <code>leadership</code>, <code>recent_news</code>, <code>risks</code>) are the v1.0 set.</li></ul>
+
+  <!-- ============================= SCOPE ============================= -->
+  <h2 id="s3"><span class="sec">§3</span> Scope</h2>
+  <h4>In scope</h4>
+  <ul><li>Repository scaffold, dependency manifest, environment template.</li><li>Eight Postgres migrations covering the §11 data model.</li><li>Four JSON Schemas: Brief (§11.2), EvidenceItem (§11.3), Signal (§11.4), Dossier (§11.5).</li><li>Citation chain verifier (<code>src/citation_verifier.ts</code>) — the three-hop check, fully unit-tested.</li><li>Snippet normalization (<code>src/normalize.ts</code>) — whitespace collapse + NFC + smart-quote folding, fully unit-tested.</li><li>Coverage decision (<code>src/coverage.ts</code>) — pure function over the signal set, fully unit-tested.</li><li>Idempotency key derivation (<code>src/idempotency.ts</code>) — canonicalized SHA-256.</li><li>Versioned configs: <code>config/slot_taxonomy.json</code>, <code>config/budgets.json</code> (queries, fetches, bytes, coverage cap, confidence floor).</li><li>CI workflow running tests + schema validation on push.</li></ul>
+  <h4>Out of scope</h4>
+  <ul><li>Any n8n workflow — S02 onward.</li><li>Any model call — S02 onward.</li><li>Any web access — S03.</li><li>Eval harness with recorded fixtures — S06.</li></ul>
+
+  <!-- ============================= DELIVERABLES ============================= -->
+  <h2 id="s4"><span class="sec">§4</span> Deliverables</h2>
+  <p class="muted">Concrete artifacts produced by the session, each traceable back to the parent SRS section that motivates it.</p>
+  <table><thead><tr><th class='id'>Deliverable</th><th>Artifact</th><th>Traces to</th></tr></thead><tbody><tr><td class='id'>Repo scaffold</td><td><code>package.json</code>, <code>tsconfig.json</code>, <code>.env.example</code>, <code>README.md</code></td><td class='muted'>MICT-AGENT-004 §11</td></tr><tr><td class='id'>Migrations</td><td><code>migrations/001_run.sql</code> … <code>008_dead_letter.sql</code></td><td class='muted'>§11.1, §11.3–11.5</td></tr><tr><td class='id'>Brief schema</td><td><code>schemas/brief.schema.json</code></td><td class='muted'>§11.2, FR-BR-2</td></tr><tr><td class='id'>Evidence schema</td><td><code>schemas/evidence_item.schema.json</code></td><td class='muted'>§11.3, FR-SE-2</td></tr><tr><td class='id'>Signal schema</td><td><code>schemas/signal.schema.json</code></td><td class='muted'>§11.4, FR-AN-1/2</td></tr><tr><td class='id'>Dossier schema</td><td><code>schemas/dossier.schema.json</code></td><td class='muted'>§11.5, FR-SY-1/2</td></tr><tr><td class='id'>Citation chain verifier</td><td><code>src/citation_verifier.ts</code> + tests</td><td class='muted'>§10.10, FR-GR-1/2</td></tr><tr><td class='id'>Snippet normalization</td><td><code>src/normalize.ts</code> + tests</td><td class='muted'>FR-GR-2</td></tr><tr><td class='id'>Coverage decision</td><td><code>src/coverage.ts</code> + tests</td><td class='muted'>§10.9, FR-OR-2/3</td></tr><tr><td class='id'>Idempotency key</td><td><code>src/idempotency.ts</code> + tests</td><td class='muted'>§11.1</td></tr><tr><td class='id'>Configs</td><td><code>config/slot_taxonomy.json</code>, <code>config/budgets.json</code></td><td class='muted'>§11.7, NFR-MA-1</td></tr><tr><td class='id'>CI</td><td><code>.github/workflows/test.yml</code></td><td class='muted'>(prep for §18)</td></tr></tbody></table>
+
+  <!-- ============================= SEQUENCE ============================= -->
+  <h2 id="s5"><span class="sec">§5</span> Build Sequence</h2>
+  <p class="muted">An ordered set of steps. Each step is small enough to complete and verify before moving to the next; together they cover every deliverable.</p>
+  <ol><li>Initialize repo. Lock language + lint + test runner. Commit <code>.env.example</code>.</li><li>Spin local Postgres via Docker. <strong>Do not</strong> install <code>pgvector</code> — confirm a plain Postgres is what this piece needs (departure from RAG-002).</li><li>Write the eight migrations against §11. Critical fields: <code>evidence.content_hash</code>, <code>evidence.source_url</code>, <code>evidence.snippet</code>, <code>evidence.fetched_at</code> — every claim being re-checkable depends on these existing on every row. <code>signal.evidence_ids</code> as an array. <code>run.request_hash</code> with a unique index for idempotency.</li><li>Apply migrations to a fresh DB; verify column types and indexes.</li><li>Author <code>brief.schema.json</code> matching §11.2 — strict <code>additionalProperties:false</code>, the nine-slot enum, the target object structure, optional <code>seed_urls</code> and <code>depth</code>.</li><li>Author <code>evidence_item.schema.json</code> matching §11.3 — every provenance field required.</li><li>Author <code>signal.schema.json</code> matching §11.4 — value, confidence (bounded [0,1]), rationale, evidence_ids array (non-empty unless status is <code>insufficient_evidence</code>).</li><li>Author <code>dossier.schema.json</code> matching §11.5 — executive summary + section per slot, every claim citing signal_ids.</li><li>Implement snippet normalization. Rules: collapse whitespace runs to single spaces, normalize to NFC, fold smart quotes to ASCII, strip zero-width characters. Document the rules in the file header.</li><li>Implement the citation chain verifier as a pure function: <code>verify(dossier, signals, evidence) → per-claim results</code>. Three hops checked in order: (1) cited signal_ids exist and are non-abstaining; (2) cited signals' evidence_ids exist in the evidence set; (3) normalize(snippet) ∈ normalize(evidence_text). On any failure, return <code>{verified:false, recast_as_gap:true, reason}</code>.</li><li>Write the citation verifier test suite: passing chains, broken-at-signal (signal not present), broken-at-signal (abstaining signal), broken-at-evidence (evidence not present), broken-at-snippet (snippet not in evidence text), whitespace edge cases, Unicode edge cases.</li><li>Implement coverage decision. Inputs: brief, signals. Output: <code>{action, unfilled_required, iteration}</code>. Logic: count signals whose status is <code>insufficient_evidence</code> OR confidence &lt; floor for slots marked <code>required:true</code>. If any AND iteration &lt; cap → <code>action:'loop'</code> with the unfilled slot names; otherwise <code>action:'proceed'</code>.</li><li>Write coverage tests: all-filled-proceed, one-unfilled-but-optional-proceed, one-unfilled-required-but-at-cap-proceed, one-unfilled-required-budget-available-loop.</li><li>Implement idempotency key: canonicalize request (lowercase, trim whitespace, sort optional fields) then SHA-256. Tests: same canonicalized → same hash; different content → different hash.</li><li>Wire CI: tests + schema validation on every push.</li></ol>
+
+  <!-- ============================= DEFINITION OF DONE ============================= -->
+  <h2 id="s6"><span class="sec">§6</span> Definition of Done</h2>
+  <p class="muted">The session ends when every box below is checked. These are stricter than the goal criteria — they include the housekeeping that makes the work durable.</p>
+  <div class="box plain" data-label="Done Means">
+    <ul class="checklist"><li><code>git status</code> clean; <code>main</code> protected.</li><li>Fresh DB + <code>npm run migrate</code> + <code>npm test</code> = green.</li><li>All four schemas validate cleanly.</li><li>Citation chain verifier tests cover all four failure modes plus passing case.</li><li>Snippet normalization handles real-world PDF-extraction dirt (NBSP, smart quotes, ligatures).</li><li>Coverage decision tests cover all four states.</li><li>Idempotency: byte-canonicalized request produces stable hash.</li><li>CI green on head commit.</li><li>README explains: how to install (no pgvector!), how to run migrations, how to run tests.</li></ul>
+  </div>
+
+  <!-- ============================= RISKS ============================= -->
+  <h2 id="s7"><span class="sec">§7</span> Risks &amp; Pitfalls</h2>
+  <p class="muted">The mistakes that, in practice, derail sessions of this kind. Each is paired with a concrete mitigation rather than a general warning.</p>
+  <table><thead><tr><th class='id'>Risk</th><th>Mitigation</th></tr></thead><tbody><tr><td class='id'>Snippet normalization too aggressive vs. too lax</td><td>Same trade-off as RAG-002 S01: lose too much and verifier false-positives; lose too little and verifier false-negatives. Test against actual web-extraction output, not hand-typed strings.</td></tr><tr><td class='id'>Citation chain verifier's three-hop logic tangled</td><td>Three hops × multiple cited ids per claim × cross-field rule (abstaining signals can't be cited) = combinatorial. Write tests <em>before</em> the code; the test suite is the spec.</td></tr><tr><td class='id'>Coverage decision misreads brief</td><td>Counting optional slots as required, or missing the iteration cap check, breaks the coverage loop's bound. Type the required flag explicitly; assert iteration ≤ cap in code, not just in expectation.</td></tr><tr><td class='id'>Migrations omit content_hash or provenance fields</td><td>Every claim being re-checkable depends on <code>evidence.content_hash</code>, <code>evidence.source_url</code>, <code>evidence.snippet</code>, <code>evidence.fetched_at</code>. Missing any breaks the grounding story irreversibly. Verify against §11.3 line by line.</td></tr><tr><td class='id'>Idempotency canonicalization too liberal or too strict</td><td>If "Northwind Robotics" and " Northwind Robotics " hash differently, duplicate runs sneak through. If "Northwind Robotics" and "Northwind Robotics Inc." hash the same, distinct requests collide. Document the canonicalization rule and test edge cases.</td></tr></tbody></table>
+
+  <!-- ============================= HANDOFF ============================= -->
+  <h2 id="s8"><span class="sec">§8</span> Handoff to the Next Session</h2>
+  <p>S02 picks up the Brief schema (for the brief normalizer's structured output) and the migrations (for the first writes to run + brief tables). The citation chain verifier and coverage decision sit dormant until S04/S05 wire them into the orchestration. From this point on, the deterministic core <em>does not move</em>.</p>
+
+  <!-- ============================= FOOTER ============================= -->
+  <div class="footer">
+    MICT-AGENT-004-S01 · Session 1 of 7 · Deterministic Core · jakemorganlabs
+    <em>"The agents gather; the evidence grounds; the orchestrator bounds."</em>
+  </div>
+
+</div>
+</body>
+</html>

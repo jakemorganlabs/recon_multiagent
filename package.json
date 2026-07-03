@@ -1,0 +1,29 @@
+{
+  "name": "recon-multiagent",
+  "version": "1.0.0",
+  "description": "Recon — Multi-Agent Company Intelligence. Deterministic core, Search/Analyst/Synthesis agents, bounded coverage loop, deterministic grounding.",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "migrate": "node --experimental-strip-types scripts/migrate.ts",
+    "lint": "eslint src/**/*.ts"
+  },
+  "keywords": ["multi-agent", "intelligence", "grounding", "deterministic"],
+  "author": "jakemorganlabs",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0",
+    "eslint": "^9.0.0"
+  },
+  "dependencies": {
+    "pg": "^8.13.0",
+    "dotenv": "^16.4.0"
+  }
+}
