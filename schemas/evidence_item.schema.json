@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://recon.jakemorganlabs/schemas/evidence_item.schema.json",
+  "title": "EvidenceItem",
+  "description": "One retrieved web passage with full provenance and content hash.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["evidence_id", "query", "source_url", "snippet", "content_hash", "fetched_at"],
+  "properties": {
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "query": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The search query that produced this item."
+    },
+    "source_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Canonical source URL."
+    },
+    "page_title": {
+      "type": "string",
+      "description": "Page title if available."
+    },
+    "snippet": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000,
+      "description": "The cited passage retrieved from the page."
+    },
+    "fetched_text": {
+      "type": "string",
+      "description": "Optional full fetched text."
+    },
+    "content_hash": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of fetched_text."
+    },
+    "retrieval_rank": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Position in the result list."
+    },
+    "fetched_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp when the page was fetched."
+    }
+  }
+}

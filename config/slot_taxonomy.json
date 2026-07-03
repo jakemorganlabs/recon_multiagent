@@ -1,0 +1,60 @@
+{
+  "version": "1.0",
+  "description": "Taxonomy of intelligence slots every dossier covers.",
+  "slots": [
+    {
+      "slot_name": "overview",
+      "required": true,
+      "question": "What does this company do, and what is its market position?",
+      "confidence_floor": 0.6
+    },
+    {
+      "slot_name": "products",
+      "required": true,
+      "question": "What are its key products or services?",
+      "confidence_floor": 0.6
+    },
+    {
+      "slot_name": "funding",
+      "required": false,
+      "question": "What is its funding history and current runway?",
+      "confidence_floor": 0.5
+    },
+    {
+      "slot_name": "headcount",
+      "required": false,
+      "question": "How large is the team, and where is it located?",
+      "confidence_floor": 0.5
+    },
+    {
+      "slot_name": "tech_stack",
+      "required": false,
+      "question": "What technologies, frameworks, or infrastructure does it use?",
+      "confidence_floor": 0.5
+    },
+    {
+      "slot_name": "hiring",
+      "required": false,
+      "question": "What roles is it actively hiring for?",
+      "confidence_floor": 0.5
+    },
+    {
+      "slot_name": "leadership",
+      "required": false,
+      "question": "Who are the key executives and board members?",
+      "confidence_floor": 0.5
+    },
+    {
+      "slot_name": "recent_news",
+      "required": false,
+      "question": "What notable events, launches, or coverage appeared recently?",
+      "confidence_floor": 0.5
+    },
+    {
+      "slot_name": "risks",
+      "required": false,
+      "question": "What regulatory, competitive, or operational risks are visible?",
+      "confidence_floor": 0.5
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://recon.jakemorganlabs/schemas/dossier.schema.json",
+  "title": "Dossier",
+  "description": "Final structured report with per-slot sections and claim-level citations.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sections"],
+  "properties": {
+    "executive_summary": {
+      "type": "string",
+      "description": "High-level overview of findings."
+    },
+    "sections": {
+      "type": "object",
+      "additionalProperties": false,
+      "propertyNames": {
+        "enum": [
+          "overview",
+          "products",
+          "funding",
+          "headcount",
+          "tech_stack",
+          "hiring",
+          "leadership",
+          "recent_news",
+          "risks"
+        ]
+      },
+      "patternProperties": {
+        "^(overview|products|funding|headcount|tech_stack|hiring|leadership|recent_news|risks)$": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["claims"],
+          "properties": {
+            "claims": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["text", "signal_ids"],
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The claim text."
+                  },
+                  "signal_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z0-9_-]+$"
+                    },
+                    "minItems": 1,
+                    "description": "Signals that support this claim."
+                  },
+                  "gap": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "True if the claim was recast as a gap due to failed grounding."
+                  }
+                }
+              }
+            },
+            "summary": {
+              "type": "string",
+              "description": "Optional slot-level summary."
+            }
+          }
+        }
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slot", "reason"],
+        "properties": {
+          "slot": {
+            "type": "string",
+            "enum": [
+              "overview",
+              "products",
+              "funding",
+              "headcount",
+              "tech_stack",
+              "hiring",
+              "leadership",
+              "recent_news",
+              "risks"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "description": "Explicitly flagged gaps where evidence was insufficient."
+    },
+    "grounding_passed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Set by the deterministic verifier after citation chain checks."
+    }
+  }
+}

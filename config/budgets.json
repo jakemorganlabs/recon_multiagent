@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "description": "Per-run resource budgets and tuning constants.",
+  "coverage": {
+    "max_iterations": 3,
+    "confidence_floor": 0.6
+  },
+  "search": {
+    "max_queries_per_run": 20,
+    "max_fetches_per_run": 30,
+    "fetch_timeout_ms": 15000,
+    "max_fetch_bytes": 1048576,
+    "results_per_query": 10
+  },
+  "model": {
+    "provider": "deepinfra",
+    "model_name": "google/gemma-4-26B-A4B-it",
+    "max_tokens_search": 2048,
+    "max_tokens_analyst": 4096,
+    "max_tokens_synthesis": 8192,
+    "temperature": 0.2
+  }
+}

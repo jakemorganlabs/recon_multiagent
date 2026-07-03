@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://recon.jakemorganlabs/schemas/signal.schema.json",
+  "title": "Signal",
+  "description": "Structured fact for a named slot, citing the evidence it came from.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["signal_id", "slot", "status", "evidence_ids"],
+  "properties": {
+    "signal_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "slot": {
+      "type": "string",
+      "enum": [
+        "overview",
+        "products",
+        "funding",
+        "headcount",
+        "tech_stack",
+        "hiring",
+        "leadership",
+        "recent_news",
+        "risks"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["filled", "insufficient_evidence", "abstain"]
+    },
+    "value": {
+      "type": "string",
+      "description": "Extracted fact. Null when abstaining or insufficient_evidence."
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confidence score [0,1]."
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Why the agent assigned this value and confidence."
+    },
+    "evidence_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_-]+$"
+      },
+      "description": "Non-empty when status is 'filled'."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "filled" } }
+      },
+      "then": {
+        "required": ["value", "confidence"],
+        "properties": {
+          "evidence_ids": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "insufficient_evidence" } }
+      },
+      "then": {
+        "properties": {
+          "evidence_ids": { "maxItems": 0 }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "abstain" } }
+      },
+      "then": {
+        "properties": {
+          "evidence_ids": { "maxItems": 0 }
+        }
+      }
+    }
+  ]
+}
