@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { verifyDossier, type ClaimVerification } from '../src/citation_verifier.js';
+import { verifyDossier } from '../src/citation_verifier.js';
 import type { Dossier, Signal, EvidenceItem } from '../src/types.js';
 
 function baseEvidence(): EvidenceItem {

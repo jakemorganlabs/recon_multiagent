@@ -1,0 +1,49 @@
+{
+  "name": "recon-brief-shared-state",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [380, 320],
+      "webhookId": "recon-request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// HMAC Verification\nconst { verifyRequestHmac } = require('/opt/node_modules/recon-multiagent/dist/hmac.js');\n\nconst secret = $env.HMAC_SECRET;\nconst method = $input.first().json.headers['content-type'] ? 'POST' : 'POST';\nconst path = '/api/request';\nconst authorization = $input.first().json.headers['authorization'] ?? '';\nconst body = JSON.stringify($input.first().json.body);\n\nconst result = verifyRequestHmac({\n  secret,\n  method,\n  path,\n  body,\n  authorization,\n});\n\nif (!result.valid) {\n  return [{ json: { statusCode: 401, body: { status: 'unauthorized', reason: result.reason } } }];\n}\n\n// Pass validated body to next node\nreturn [{ json: { statusCode: 200, rawRequest: $input.first().json.body, authorization } }];"
+      },
+      "name": "Verify HMAC",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [580, 320]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Idempotency + Run creation + Brief Normalizer\nconst { handleRequest } = require('/opt/node_modules/recon-multiagent/dist/handler.js');\n\nconst result = await handleRequest({\n  hmacSecret: $env.HMAC_SECRET,\n  method: 'POST',\n  path: '/api/request',\n  body: JSON.stringify($input.first().json.rawRequest),\n  authorization: $input.first().json.authorization,\n  normalizerOpts: {\n    baseUrl: $env.DEEPINFRA_BASE_URL,\n    apiKey: $env.DEEPINFRA_API_KEY,\n    model: $env.MODEL_NAME ?? 'google/gemma-4-26B-A4B-it',\n  },\n});\n\nreturn [{ json: result }];"
+      },
+      "name": "Process Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [780, 320]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [[{"node": "Verify HMAC", "type": "main", "index": 0}]]
+    },
+    "Verify HMAC": {
+      "main": [
+        ["Process Request"]
+      ]
+    }
+  },
+  "settings": {
+    "saveExecutionProgress": true,
+    "timezone": "UTC"
+  },
+  "tags": ["recon", "s02", "brief"],
+  "staticData": null,
+  "pinData": {},
+  "dynamicParameters": {}
+}

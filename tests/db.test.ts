@@ -15,8 +15,9 @@ describe.skipIf(!DATABASE_URL)('Database migrations', () => {
       ORDER BY table_name
     `);
 
-    const tables = result.rows.map((r) => r.table_name);
-    for (const name of ['run', 'brief', 'evidence', 'signal', 'tool_call', 'dossier', 'audit', 'dead_letter', 'migrations']) {
+    const tables: string[] = result.rows.map((r: { table_name: string }) => r.table_name);
+    const expected = ['run', 'brief', 'evidence', 'signal', 'tool_call', 'dossier', 'audit', 'dead_letter', 'migrations'];
+    for (const name of expected) {
       expect(tables).toContain(name);
     }
 
