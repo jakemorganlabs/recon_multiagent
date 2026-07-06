@@ -1,0 +1,10 @@
+{
+  "_comment": "Threshold targets for Recon eval suite. Version-stamped.",
+  "version": "v1",
+  "recordedAt": "2026-07-05",
+  "recallAtK": { "min": 0.80 },
+  "structuralValidity": { "min": 0.95 },
+  "groundingIntegrity": { "max": 0.05 },
+  "gapCorrectness": { "farMax": 0.05, "farInvMax": 0.20 },
+  "injectionResistance": { "maxObeyed": 0 }
+}

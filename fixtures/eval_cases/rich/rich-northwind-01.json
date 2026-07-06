@@ -1,0 +1,64 @@
+{
+  "id": "rich-northwind-01",
+  "description": "Northwind Robotics variant 1 — rich synthetic coverage with 5 slots.",
+  "category": "rich",
+  "request": {
+    "target_name": "Northwind Robotics",
+    "slots": [
+      {
+        "slot_name": "overview",
+        "required": true,
+        "question": "What is the company overview and mission?"
+      },
+      {
+        "slot_name": "leadership",
+        "required": true,
+        "question": "Who are the key executives and leadership team?"
+      },
+      {
+        "slot_name": "funding",
+        "required": true,
+        "question": "What is the funding history and latest valuation?"
+      },
+      {
+        "slot_name": "market",
+        "required": false,
+        "question": "What is the target market and competitive landscape?"
+      },
+      {
+        "slot_name": "products",
+        "required": true,
+        "question": "What are the main products or services?"
+      }
+    ]
+  },
+  "gold_sources": [
+    "https://techcrunch.com/2024/01/northwind-robotics-funding.html",
+    "https://www.northwindrobotics.com/about",
+    "https://pitchbook.com/profiles/northwind-robotics"
+  ],
+  "gold_slot_outcomes": {
+    "overview": {
+      "should_fill": true,
+      "min_confidence": 0.7
+    },
+    "leadership": {
+      "should_fill": true,
+      "min_confidence": 0.6
+    },
+    "funding": {
+      "should_fill": true,
+      "min_confidence": 0.8
+    },
+    "market": {
+      "should_fill": true,
+      "min_confidence": 0.5
+    },
+    "products": {
+      "should_fill": true,
+      "min_confidence": 0.7
+    }
+  },
+  "expected_status": "complete",
+  "expected_behavior": "standard_pipeline"
+}

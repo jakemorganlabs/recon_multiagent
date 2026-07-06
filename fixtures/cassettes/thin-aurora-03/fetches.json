@@ -1,0 +1,22 @@
+[
+  {
+    "url": "https://aurorabiotech.com/",
+    "htmlDigest": "6e188c08",
+    "extractedText": "Aurora Biotech is a precision medicine startup developing gene therapies for rare diseases. Founded in 2021.",
+    "title": "Aurora Biotech",
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-06T01:40:00.777Z",
+    "version": "v1"
+  },
+  {
+    "url": "https://aurorabiotech.com/press",
+    "htmlDigest": "-44044d97",
+    "extractedText": "Aurora Biotech raised $8M in seed funding from Lux Capital.",
+    "title": "Press",
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-06T01:40:00.777Z",
+    "version": "v1"
+  }
+]

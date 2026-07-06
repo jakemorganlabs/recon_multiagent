@@ -1,0 +1,68 @@
+[
+  {
+    "query": "Northwind Robotics company overview",
+    "results": [
+      {
+        "title": "Northwind Robotics — About",
+        "url": "https://www.northwindrobotics.com/about",
+        "description": "Industrial automation leader."
+      },
+      {
+        "title": "Northwind Robotics Crunchbase",
+        "url": "https://www.crunchbase.com/organization/northwind-robotics",
+        "description": "Company profile."
+      }
+    ],
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-06T01:40:00.774Z",
+    "version": "v1"
+  },
+  {
+    "query": "Northwind Robotics CEO leadership team",
+    "results": [
+      {
+        "title": "Leadership — Northwind Robotics",
+        "url": "https://www.northwindrobotics.com/leadership",
+        "description": "Executive bios."
+      },
+      {
+        "title": "Northwind Robotics on PitchBook",
+        "url": "https://pitchbook.com/profiles/northwind-robotics",
+        "description": "Investor profile."
+      }
+    ],
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-06T01:40:00.774Z",
+    "version": "v1"
+  },
+  {
+    "query": "Northwind Robotics funding valuation",
+    "results": [
+      {
+        "title": "Northwind Robotics raises $1.2B in Strategic round",
+        "url": "https://techcrunch.com/2024/01/northwind-robotics-funding.html",
+        "description": "Funding round details."
+      }
+    ],
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-06T01:40:00.774Z",
+    "version": "v1"
+  },
+  {
+    "query": "Northwind Robotics products services",
+    "results": [
+      {
+        "title": "Products — Northwind Robotics",
+        "url": "https://www.northwindrobotics.com/products",
+        "description": "Product catalog."
+      }
+    ],
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-06T01:40:00.774Z",
+    "version": "v1"
+  }
+]

@@ -17,6 +17,10 @@
 
 import { searchWeb, computeContentHash, type SearchAdapterOptions } from './search_adapter.js';
 import { fetchWeb, type FetchToolOptions } from './fetch_tool.js';
+import {
+  searchWebWithCassette,
+  fetchWebWithCassette,
+} from './cassette_player.js';
 import { extractMainContent } from './extraction_sidecar.js';
 import { recordToolCall, countToolCalls } from './tool_call_writer.js';
 import { persistEvidence } from './evidence_writer.js';
@@ -43,6 +47,8 @@ export interface SearchAgentOptions {
   };
   /** Temperature — always 0 for deterministic search */
   temperature?: number;
+  /** Cassette case ID for eval mode (optional) */
+  cassetteCaseId?: string;
 }
 
 export interface SearchAgentResult {
@@ -93,7 +99,10 @@ export async function runSearchAgent(
         break;
       }
 
-      const searchRes = await searchWeb(query, opts.searchOpts);
+      const searchFn = opts.cassetteCaseId
+        ? (q: string) => searchWebWithCassette(q, opts.searchOpts, opts.cassetteCaseId!)
+        : (q: string) => searchWeb(q, opts.searchOpts);
+      const searchRes = await searchFn(query);
       await recordToolCall({
         run_id: runId,
         agent: 'search_agent',
@@ -116,10 +125,14 @@ export async function runSearchAgent(
         }
 
         const result = searchRes.results[rank];
-        const fetchRes = await fetchWeb(result.url, {
+        const fetchOpts = {
           ...opts.fetchOpts,
           maxBytes: opts.budgets.max_fetch_bytes,
-        });
+        };
+        const fetchFn = opts.cassetteCaseId
+          ? (u: string) => fetchWebWithCassette(u, fetchOpts, opts.cassetteCaseId!)
+          : (u: string) => fetchWeb(u, fetchOpts);
+        const fetchRes = await fetchFn(result.url);
 
         await recordToolCall({
           run_id: runId,

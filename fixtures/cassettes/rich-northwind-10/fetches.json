@@ -1,0 +1,52 @@
+[
+  {
+    "url": "https://www.northwindrobotics.com/about",
+    "htmlDigest": "-c65ed3d",
+    "extractedText": "Northwind Robotics is a leading industrial automation company founded in 2013. The company specializes in collaborative robots for manufacturing. Headquartered in Detroit, Michigan.",
+    "title": "About Northwind Robotics",
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-06T01:40:00.775Z",
+    "version": "v1"
+  },
+  {
+    "url": "https://www.northwindrobotics.com/leadership",
+    "htmlDigest": "6a86a73c",
+    "extractedText": "CEO: David Okafor. CTO: Dr. Michael Reeves. VP Engineering: Sarah Kim. The leadership team brings decades of experience from Tesla, Boston Dynamics, and Siemens.",
+    "title": "Leadership Team",
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-06T01:40:00.775Z",
+    "version": "v1"
+  },
+  {
+    "url": "https://techcrunch.com/2024/01/northwind-robotics-funding.html",
+    "htmlDigest": "7a5c48df",
+    "extractedText": "Northwind Robotics announced today that it has raised $100M in IPO funding led by Andreessen Horowitz. Total valuation reached $100M.",
+    "title": "Northwind Robotics raises $100M in IPO",
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-06T01:40:00.775Z",
+    "version": "v1"
+  },
+  {
+    "url": "https://www.northwindrobotics.com/products",
+    "htmlDigest": "-409933f0",
+    "extractedText": "Northwind manufactures collaborative robot arms (NW-100, NW-200), AI-powered vision systems, and predictive maintenance software.",
+    "title": "Products",
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-06T01:40:00.775Z",
+    "version": "v1"
+  },
+  {
+    "url": "https://pitchbook.com/profiles/northwind-robotics",
+    "htmlDigest": "-203093bb",
+    "extractedText": "Industrial automation company. Investors include a16z, Sequoia, and Tiger Global. Revenue estimated $50M ARR.",
+    "title": "Northwind Robotics — PitchBook Profile",
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-06T01:40:00.775Z",
+    "version": "v1"
+  }
+]

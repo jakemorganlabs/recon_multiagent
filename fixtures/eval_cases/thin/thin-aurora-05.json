@@ -1,0 +1,44 @@
+{
+  "id": "thin-aurora-05",
+  "description": "Aurora Biotech variant 5 — thin coverage; some slots intentionally sparse.",
+  "category": "thin",
+  "request": {
+    "target_name": "Aurora Biotech Inc",
+    "slots": [
+      {
+        "slot_name": "overview",
+        "required": true,
+        "question": "Company overview"
+      },
+      {
+        "slot_name": "leadership",
+        "required": true,
+        "question": "Leadership team"
+      },
+      {
+        "slot_name": "funding",
+        "required": false,
+        "question": "Funding history"
+      }
+    ]
+  },
+  "gold_sources": [
+    "https://aurorabiotech.com/"
+  ],
+  "gold_slot_outcomes": {
+    "overview": {
+      "should_fill": true,
+      "min_confidence": 0.6
+    },
+    "leadership": {
+      "should_fill": false,
+      "min_confidence": 0.6
+    },
+    "funding": {
+      "should_fill": false,
+      "min_confidence": 0.5
+    }
+  },
+  "expected_status": "insufficient",
+  "expected_behavior": "standard_pipeline"
+}

@@ -1,0 +1,30 @@
+{
+  "id": "empty-phantom-01",
+  "description": "Phantom Ventures 1 — intentionally no web presence; system should abstain across slots.",
+  "category": "empty",
+  "request": {
+    "target_name": "Phantom Ventures 1",
+    "slots": [
+      {
+        "slot_name": "overview",
+        "required": true,
+        "question": "Company overview"
+      },
+      {
+        "slot_name": "leadership",
+        "required": true,
+        "question": "Leadership team"
+      }
+    ]
+  },
+  "gold_slot_outcomes": {
+    "overview": {
+      "should_fill": false
+    },
+    "leadership": {
+      "should_fill": false
+    }
+  },
+  "expected_status": "insufficient",
+  "expected_behavior": "standard_pipeline"
+}
