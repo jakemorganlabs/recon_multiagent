@@ -1,0 +1,35 @@
+{
+  "name": "recon-s04-analyst-coverage",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [340, 300],
+      "webhookId": "recon-analyst"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Session S04: Analyst Agent + Coverage Loop\n// Analyst is structurally sealed from the web — evidence comes ONLY from\n// getEvidenceByRunId (read-shared-state). No search or fetch tool is bound.\n// Model: DeepInfra / google/gemma-4-26B-A4B-it\n// Temperature: 0\n// The coverage controller (deterministic) owns the loop counter and hard cap.\n\nconst { runAnalystAgent } = require('/opt/node_modules/recon-multiagent/dist/analyst_agent.js');\nconst { persistSignals } = require('/opt/node_modules/recon-multiagent/dist/signal_writer.js');\nconst { getEvidenceByRunId, updateCoverageIteration } = require('/opt/node_modules/recon-multiagent/dist/db.js');\nconst { decideCoverage } = require('/opt/node_modules/recon-multiagent/dist/coverage.js');\n\nconst body = $input.first().json;\nconst runId = body.run_id;\nconst brief = body.brief;\nconst iteration = Number(body.iteration ?? 0);\nconst cap = Number($env.COVERAGE_MAX_ITERATIONS ?? 3);\nconst confidenceFloor = Number($env.COVERAGE_CONFIDENCE_FLOOR ?? 0.6);\n\nif (!runId || !brief) {\n  return [{ json: { statusCode: 400, body: { status: 'missing_run_id_or_brief' } } }];\n}\n\n// === Step 1: Read evidence from shared state (Analyst's ONLY input) ===\nconst evidence = await getEvidenceByRunId(runId);\n\n// === Step 2: Run Analyst Agent ===\nconst analystResult = await runAnalystAgent(runId, brief, evidence, {\n  baseUrl: $env.DEEPINFRA_BASE_URL,\n  apiKey: $env.DEEPINFRA_API_KEY,\n  model: $env.MODEL_NAME ?? 'google/gemma-4-26B-A4B-it',\n  temperature: 0,\n  confidenceFloor,\n});\n\n// === Step 3: Persist signals ===\nconst persistResult = await persistSignals(runId, analystResult.signals);\n\n// === Step 4: Coverage decision (deterministic, not the model) ===\nconst coverage = decideCoverage(brief, analystResult.signals, iteration, cap, confidenceFloor);\n\n// === Step 5: Hard cap — iteration >= cap means proceed regardless ===\nlet action = coverage.action;\nif (iteration >= cap) {\n  action = 'proceed';\n}\n\n// === Step 6: If looping, increment iteration counter ===\nif (action === 'loop') {\n  await updateCoverageIteration(runId, iteration + 1);\n}\n\nreturn [{ json: {\n  statusCode: 200,\n  body: {\n    status: action === 'loop' ? 'loop' : 'proceed',\n    run_id: runId,\n    analyst: {\n      signals: analystResult.signals.length,\n      abstains: analystResult.abstainCount,\n      repair_attempts: analystResult.repairAttempts,\n      stopped: analystResult.stoppedBecause,\n    },\n    persist: {\n      persisted_count: persistResult.persisted.length,\n      failure_count: persistResult.failures.length,\n    },\n    coverage: {\n      action,\n      iteration: iteration + (action === 'loop' ? 1 : 0),\n      unfilled_required: coverage.unfilled_required,\n    },\n  },\n} }];\n"
+      },
+      "name": "Analyst + Coverage",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [580, 300]
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [[{"node": "Analyst + Coverage", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "saveExecutionProgress": true,
+    "timezone": "UTC"
+  },
+  "tags": ["recon", "s04", "analyst", "coverage", "deepinfra", "gemma"],
+  "staticData": null,
+  "pinData": {},
+  "dynamicParameters": {}
+}
