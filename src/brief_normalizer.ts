@@ -10,7 +10,6 @@
  * If the model signals the target is unresolvable (status: 'unresolvable'),
  * returns a clarify response instead of a Brief.
  *
- * No Anthropic code — tuned for DeepInfra / Gemma.
  */
 
 import { readFileSync } from 'node:fs';

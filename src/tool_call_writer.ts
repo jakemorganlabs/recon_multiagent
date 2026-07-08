@@ -4,7 +4,7 @@
  * Every invocation of search or fetch writes a `tool_call` row matching
  * the S01 migration schema (005_tool_call.sql).
  *
- * No Anthropic code. Deterministic DB layer.
+ *
  */
 
 import { getPool } from './db.js';

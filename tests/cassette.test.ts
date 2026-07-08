@@ -3,7 +3,7 @@
  *
  * Covers recorder/player types, serialization, and lookup.
  *
- * No Anthropic code.
+ *
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';

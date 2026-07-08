@@ -4,7 +4,7 @@
  * Allow/deny lists for the fetch tool. Loaded from config/domain_policy.json.
  * Default policy: deny-RFC1918 + deny-known-malicious + allow-everything-else.
  *
- * No Anthropic code. Deterministic guard layer.
+ *
  */
 
 import { readFileSync } from 'node:fs';

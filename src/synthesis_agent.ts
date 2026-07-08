@@ -11,7 +11,7 @@
  *
  * Dossier output is schema-validated against dossier.schema.json.
  * One-shot repair loop on schema failure.
- * No Anthropic code. No web access. No action capability.
+ *
  */
 
 import { readFileSync } from 'node:fs';

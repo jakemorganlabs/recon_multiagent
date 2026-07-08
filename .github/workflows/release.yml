@@ -1,0 +1,68 @@
+name: Release with OIDC Provenance
+
+on:
+  release:
+    types: [published]
+
+# Minimal permissions: contents:read for checkout, id-token:write for OIDC attestation.
+# contents:write is added only for the attestation step because
+# actions/attest-build-provenance writes to the release assets API.
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run migrations (for eval gate)
+        run: npm run migrate
+        env:
+          DATABASE_URL: postgresql://recon:recon@localhost:5432/recon
+
+      - name: Run eval suite (release gate)
+        run: |
+          npm run eval:fixtures
+          npm run eval
+        env:
+          DATABASE_URL: postgresql://recon:recon@localhost:5432/recon
+          DEEPINFRA_BASE_URL: ${{ secrets.DEEPINFRA_BASE_URL }}
+          DEEPINFRA_API_KEY: ${{ secrets.DEEPINFRA_API_KEY }}
+          MODEL_NAME: google/gemma-4-26B-A4B-it
+
+      - name: Assemble release artifact
+        run: |
+          mkdir -p _release
+          # Tagged clean workflow JSONs
+          for wf in workflows/*.json; do
+            cp "$wf" _release/
+          done
+          # Runbook and eval report
+          cp docs/runbook.md _release/ || touch _release/runbook.md
+          cp evals/report.md _release/eval_report.md || touch _release/eval_report.md
+          # Create archive
+          tar -czf "recon-${{ github.event.release.tag_name }}.tar.gz" -C _release .
+
+      - name: Secret-gate workflow JSONs (fail release on credential leak)
+        run: |
+          # Grep for any token prefixes or credential blobs in workflow exports
+          # This is the automated version of the secret_gate.sh mitigation.
+          if grep -rE 'sk-ant|sk-[a-zA-Z0-9]{24,}|Bearer [a-zA-Z0-9_-]{20,}|hooks\.slack\.com/services' workflows/; then
+            echo "❌ FAILED: Secret prefix found in workflow JSON exports. Release blocked."
+            exit 1
+          fi
+          echo "✅ Workflow exports clean of secrets."
+
+      - name: Attach artifact to release with OIDC attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            recon-${{ github.event.release.tag_name }}.tar.gz

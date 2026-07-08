@@ -20,7 +20,7 @@
     "deterministic"
   ],
   "author": "jakemorganlabs",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "engines": {
     "node": ">=22.0.0"
   },

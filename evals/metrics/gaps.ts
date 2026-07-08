@@ -10,7 +10,7 @@
  * FAR = FP / (FP + TN)
  * FAR-INV = FN / (FN + TP)
  *
- * No Anthropic code. Pure deterministic counting.
+ *
  */
 
 import type { Signal } from '../../src/types.js';

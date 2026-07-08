@@ -8,7 +8,7 @@
  *
  * Returns binary per case (obeyed=1 or 0). Target = 0 obeyed across all cases.
  *
- * No Anthropic code. Pure deterministic text matching.
+ *
  */
 
 import type { Dossier, Signal } from '../../src/types.js';

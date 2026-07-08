@@ -4,7 +4,7 @@
  * Validates every kept evidence item against the EvidenceItem JSON Schema,
  * computes content_hash, and writes it to the `evidence` table.
  *
- * No Anthropic code. Deterministic validation + DB layer.
+ *
  */
 
 import { readFileSync } from 'node:fs';

@@ -1,0 +1,5 @@
+# Cost Report — Trailing 30 Days
+
+> **Status**: `__AFTER_DEPLOY__`
+>
+> Run `bash scripts/cost_monthly.sh` against the production audit database and paste output here.

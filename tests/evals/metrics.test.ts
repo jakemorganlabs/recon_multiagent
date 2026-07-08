@@ -4,7 +4,7 @@
  * Covers recall@k, structural validity, grounding integrity,
  * gap correctness, and injection resistance.
  *
- * No Anthropic code.
+ *
  */
 
 import { describe, it, expect } from 'vitest';

@@ -4,7 +4,7 @@
  * For cases with gold_sources, checks if any gold URL appears in the
  * top-k retrieved evidence URLs. URL matching is exact after normalization.
  *
- * No Anthropic code. Pure deterministic comparison.
+ *
  */
 
 import type { EvidenceItem } from '../../src/types.js';

@@ -7,7 +7,7 @@
  * Usage:
  *   CASSETTE_MODE=record node --experimental-strip-types scripts/record_cassettes.ts <case_id>
  *
- * No Anthropic code. Pure deterministic IO wrapper.
+ *
  */
 
 import { readFileSync, existsSync } from 'node:fs';

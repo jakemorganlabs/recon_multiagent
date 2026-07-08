@@ -1,15 +1,14 @@
 /**
  * Coverage Decision
  *
- * Pure function over the brief + current signal set.
- * Returns { action: 'loop' | 'proceed', unfilled_required: string[], iteration: number }.
- *
- * Logic:
- * - Count signals whose status is 'insufficient_evidence' OR confidence < floor
- *   for slots marked required:true.
- * - If any unfilled required slot exists AND iteration < cap → action:'loop'
- *   with the unfilled slot names.
- * - Otherwise → action:'proceed'.
+ * (a) Responsibility: decides whether to continue the coverage loop or proceed
+ *     to the Synthesis Agent, based on the current set of signals and the
+ *     brief's required slots.
+ * (b) Invariant: the only loop counter is held here. It decrements from
+ *     config.budgets.max_iterations toward zero. The model never decides
+ *     when to stop — this function does.
+ * (c) Deliberately does NOT: call any model, write to the DB, or modify
+ *     evidence. Pure function over (brief, signals, iteration).
  */
 
 import type { Brief, Signal } from './types.js';

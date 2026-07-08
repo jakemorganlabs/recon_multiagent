@@ -6,7 +6,7 @@
  * - Analyst: signal.schema.json validation
  * - Synthesis: dossier.schema.json validation
  *
- * No Anthropic code. Pure deterministic validation.
+ *
  */
 
 import { readFileSync } from 'node:fs';

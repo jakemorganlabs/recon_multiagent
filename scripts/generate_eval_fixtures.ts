@@ -9,7 +9,7 @@
  * All cassettes are synthetic / hand-authored for deterministic replay.
  * No live web calls happen during fixture generation.
  *
- * No Anthropic code. Pure deterministic generation.
+ *
  */
 
 import { writeFileSync, existsSync, mkdirSync, readdirSync, rmSync } from 'node:fs';

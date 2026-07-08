@@ -2,7 +2,7 @@
  * Eval Harness Types
  *
  * Shared between eval runner, metrics, and fixtures.
- * No Anthropic code.
+ *
  */
 
 import type { Brief, EvidenceItem, Signal, Dossier } from '../src/types.js';

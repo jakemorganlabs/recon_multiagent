@@ -1,15 +1,12 @@
 /**
  * End-to-End Pipeline Orchestrator
  *
- * Composes the full Recon multi-agent pipeline:
- *   Brief → Search Agent → Analyst Agent → Synthesis Agent → Grounding Gate → Finalize
- *
- * The pipeline exposes:
- *   1. `runPipeline(caseId, request, opts)` — single-shot happy path
- *   2. `runPipelineWithCoverage(caseId, request, opts)` — with bounded coverage loop
- *
- * Bound to DeepInfra / Gemma (google/gemma-4-26B-A4B-it) throughout.
- * No Anthropic code.
+ * (a) Responsibility: wires together all agents, the coverage loop, the
+ *     grounding gate, and the finalizer into one sequential call.
+ * (b) Invariant: the coverage loop counter lives in decideCoverage() only;
+ *     this module decrements it and checks the cap. No agent can bypass it.
+ * (c) Deliberately does NOT: add retry logic, circuit breakers, or
+ *     background queues. Failures are logged and surfaced, not hidden.
  */
 
 import { createHash } from 'node:crypto';

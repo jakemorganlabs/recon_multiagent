@@ -7,7 +7,6 @@
  * - insufficient: >= 50% recast or zero claims
  * - failed: DB errors
  * - Dossier persistence + audit summary writing
- * - No Anthropic code.
  */
 
 import { describe, it, expect, vi } from 'vitest';

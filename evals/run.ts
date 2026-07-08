@@ -10,7 +10,7 @@
  * 6. Write markdown report
  * 7. Exit non-zero if thresholds breached
  *
- * No Anthropic code. Pure deterministic orchestration.
+ *
  */
 
 import { readFileSync, readdirSync, existsSync, writeFileSync } from 'node:fs';

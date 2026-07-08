@@ -6,7 +6,6 @@
  * - Upsert semantics keyed by run_id
  * - Read-back by run_id
  * - Audit and log emission
- * - No Anthropic code.
  */
 
 import { describe, it, expect, vi } from 'vitest';

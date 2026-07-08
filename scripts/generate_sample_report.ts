@@ -2,7 +2,7 @@
  * Generate a sample eval report (synthetic dry-run)
  *
  * Produces docs/sample_eval_report.md for portfolio display.
- * No Anthropic code. No live inference. Pure deterministic report generation.
+ *
  */
 
 import { writeFileSync, existsSync, mkdirSync } from 'node:fs';

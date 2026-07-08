@@ -5,7 +5,7 @@
  * Sequences: HMAC verify → idempotency check → run creation → brief normalizer
  * → shared-state writes → structured logging → audit rows.
  *
- * No Anthropic code. All LLM calls go through DeepInfra / Gemma 4.
+ *
  */
 
 import { verifyRequestHmac } from './hmac.js';

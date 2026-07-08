@@ -4,7 +4,7 @@
  * Measures recast_gaps / claims_total averaged across cases.
  * Expected near 0 by construction.
  *
- * No Anthropic code. Pure deterministic math.
+ *
  */
 
 export function computeGroundingIntegrity(

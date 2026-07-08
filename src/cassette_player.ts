@@ -6,7 +6,7 @@
  *   CASSETTE_MODE=play   → returns cached response from cassette; on miss → empty/error
  *   CASSETTE_MODE=off    → passes through to live web
  *
- * No Anthropic code. Pure deterministic interception.
+ *
  */
 
 import { searchWeb, type SearchAdapterOptions } from './search_adapter.js';

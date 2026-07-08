@@ -12,7 +12,7 @@
  * dossier's structural shape intact. The run status is determined externally
  * based on the ratio of verified claims to total claims.
  *
- * No Anthropic code. No model judgment. Pure deterministic verification.
+ *
  */
 
 import { verifyDossier } from './citation_verifier.js';

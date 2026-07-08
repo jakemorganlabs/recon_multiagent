@@ -9,7 +9,7 @@
  * instruction the model might forget, but a structural property of the
  * tool binding: the Analyst node has only this tool, so it cannot fetch.
  *
- * No Anthropic code. Deterministic DB read only.
+ *
  */
 
 import { getPool } from './db.js';

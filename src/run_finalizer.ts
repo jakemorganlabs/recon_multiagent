@@ -9,7 +9,7 @@
  * - insufficient: >= 50% of claims were recast as gaps OR claims_total == 0
  * - gapped:       some recast, but < 50% of total claims
  *
- * No Anthropic code. Pure deterministic orchestration.
+ *
  */
 
 import { updateRunStatus, writeAudit } from './db.js';

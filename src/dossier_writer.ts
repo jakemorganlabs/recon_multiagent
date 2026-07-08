@@ -7,7 +7,8 @@
  * 2. Upserts (idempotent): ON CONFLICT (run_id) DO UPDATE.
  * 3. Returns persisted ID + any failures.
  *
- * No Anthropic code. Deterministic validation + DB layer.
+ * Invariant: the Dossier schema is checked BEFORE write; invalid objects never reach the DB.
+ * Deliberately does NOT: rewrite claims, synthesize new citations, or invoke any model.
  */
 
 import { readFileSync } from 'node:fs';

@@ -7,7 +7,7 @@
  * 2. Upserts (idempotent): ON CONFLICT (run_id, signal_id) DO UPDATE.
  * 3. Returns persisted IDs + any failures.
  *
- * No Anthropic code. Deterministic validation + DB layer.
+ *
  */
 
 import { readFileSync } from 'node:fs';

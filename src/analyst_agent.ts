@@ -16,7 +16,7 @@
  * One-shot repair loop on schema failure.
  * Idempotent writes keyed on (run_id, slot_name).
  *
- * No Anthropic code. No web access. No action capability.
+ *
  */
 
 import { readFileSync } from 'node:fs';

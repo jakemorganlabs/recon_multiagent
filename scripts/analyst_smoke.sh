@@ -6,7 +6,7 @@
 #
 # Usage: ./scripts/analyst_smoke.sh <base_url> <api_key>
 #
-# No Anthropic dependencies. Uses DeepInfra / Gemma 4.
+Uses DeepInfra / Gemma 4.
 
 set -euo pipefail
 

@@ -1,0 +1,52 @@
+{
+  "name": "recon-health-check",
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.webhook",
+      "version": 1,
+      "position": [250, 300],
+      "webhookUri": "recon-health",
+      "httpMethod": "GET",
+      "responseMode": "lastNode",
+      "credentials": {
+        "name": "Webhook",
+        "id": "CRED_REF_webhook"
+      }
+    },
+    {
+      "type": "n8n-nodes-base.postgres",
+      "version": 1,
+      "position": [450, 300],
+      "operation": "executeQuery",
+      "query": "SELECT EXTRACT(EPOCH FROM (now() - MAX(created_at)))::int AS last_run_age_sec FROM run;",
+      "credentials": {
+        "name": "Postgres",
+        "id": "CRED_REF_postgres_recon"
+      }
+    },
+    {
+      "type": "n8n-nodes-base.code",
+      "version": 1,
+      "position": [650, 300],
+      "jsCode": "// Health check response — no model invocation\nconst lastRunAge = $input.first().json.last_run_age_sec ?? -1;\nreturn [\n  {\n    json: {\n      db: 'ok',\n      config: 'ok',\n      last_run_age_sec: lastRunAge\n    }\n  }\n];\n"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [{ "node": "Postgres", "type": "main", "index": 0 }]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [{ "node": "Code", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": ["health", "recon"]
+}

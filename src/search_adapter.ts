@@ -5,7 +5,7 @@
  * portfolio cost). Attaches provenance, handles 429 with exponential
  * backoff, and treats thin/empty results as valid (empty array, not error).
  *
- * No Anthropic code. Uses DeepInfra / Gemma 4 if needed for fallback
+ *
  * extraction, but the search itself is a raw HTTP call to the provider.
  */
 

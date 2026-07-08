@@ -6,7 +6,7 @@
 # 2. Second pass: Analyst fills leadership → coverage proceeds
 # 3. Hard cap prevents third loop
 #
-# No Anthropic dependencies. Pure deterministic orchestration.
+Pure deterministic orchestration.
 
 set -euo pipefail
 

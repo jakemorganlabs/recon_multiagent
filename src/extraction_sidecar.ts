@@ -5,7 +5,7 @@
  * block (<article>, <main>, or <body>), strips noise elements
  * explicitly, decodes entities, and returns clean text.
  *
- * No Anthropic code. Pure deterministic text processing.
+ *
  */
 
 export interface ExtractionResult {

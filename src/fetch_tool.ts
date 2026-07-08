@@ -5,7 +5,7 @@
  * cap, and a per-call timeout. Returns {ok, status, reason, html, url}
  * so callers can distinguish structural skips from network errors.
  *
- * No Anthropic code. This is deterministic guard-layer code.
+ *
  */
 
 export interface FetchToolOptions {

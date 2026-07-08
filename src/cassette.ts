@@ -8,7 +8,7 @@
  * CASSETTE_MODE=play    → serves from cassettes; returns empty on cache miss
  * CASSETTE_MODE=off     → passthrough to live web (default)
  *
- * No Anthropic code. Pure deterministic IO.
+ *
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';

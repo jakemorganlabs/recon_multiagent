@@ -12,7 +12,7 @@
  * Budget enforcement happens BEFORE each tool call via tool_call counts.
  * Evidence items are persisted after extraction with full provenance.
  *
- * No Anthropic code. No model-swapping. No action capability.
+ *
  */
 
 import { searchWeb, computeContentHash, type SearchAdapterOptions } from './search_adapter.js';

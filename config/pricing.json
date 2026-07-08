@@ -1,0 +1,23 @@
+{
+  "$schema": "./pricing.schema.json",
+  "meta": {
+    "as_of": "2026-07-09",
+    "provider": "deepinfra",
+    "note": "Rates are per-million-tokens. Pulled from deepinfra.com/pricing as of authoring date. Gemma does not use prompt caching; cache columns should remain zero for Gemma calls."
+  },
+  "models": {
+    "google/gemma-4-26B-A4B-it": {
+      "input_per_mtok": 0.10,
+      "output_per_mtok": 0.20,
+      "cache_read_per_mtok": 0.00,
+      "cache_creation_per_mtok": 0.00,
+      "note": "Gemma 4 does not support prompt caching. Cache read/write cost is zero."
+    }
+  },
+  "search": {
+    "provider": "brave_search",
+    "cost_per_query_usd": 0.002,
+    "source": "https://api.search.brave.com/pricing"
+  },
+  "staleness_warning_days": 90
+}
