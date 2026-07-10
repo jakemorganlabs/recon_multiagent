@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS run (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   request_hash  TEXT NOT NULL,
   status        TEXT NOT NULL DEFAULT 'pending'
-    CHECK (status IN ('pending','running','completed','failed','aborted')),
+    CHECK (status IN ('pending','running','completed','failed','aborted',
+                      'search_complete','clarify','complete','gapped','insufficient')),
   target_name   TEXT,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at    TIMESTAMPTZ NOT NULL DEFAULT now()
