@@ -15,7 +15,7 @@
     ],
     "latencyMs": 0,
     "status": "ok",
-    "recordedAt": "2026-07-06T01:40:00.773Z",
+    "recordedAt": "2026-07-10T06:16:28.493Z",
     "version": "v1"
   },
   {
@@ -34,7 +34,7 @@
     ],
     "latencyMs": 0,
     "status": "ok",
-    "recordedAt": "2026-07-06T01:40:00.773Z",
+    "recordedAt": "2026-07-10T06:16:28.493Z",
     "version": "v1"
   },
   {
@@ -48,7 +48,21 @@
     ],
     "latencyMs": 0,
     "status": "ok",
-    "recordedAt": "2026-07-06T01:40:00.773Z",
+    "recordedAt": "2026-07-10T06:16:28.493Z",
+    "version": "v1"
+  },
+  {
+    "query": "Northwind Robotics recent news market",
+    "results": [
+      {
+        "title": "Northwind Robotics — News",
+        "url": "https://www.northwindrobotics.com/news",
+        "description": "Market and competitive news."
+      }
+    ],
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-10T06:16:28.493Z",
     "version": "v1"
   },
   {
@@ -62,7 +76,7 @@
     ],
     "latencyMs": 0,
     "status": "ok",
-    "recordedAt": "2026-07-06T01:40:00.773Z",
+    "recordedAt": "2026-07-10T06:16:28.493Z",
     "version": "v1"
   }
 ]

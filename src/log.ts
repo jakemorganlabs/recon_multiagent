@@ -7,6 +7,10 @@
  *
  * Stages: request_trigger, brief_normalize, search_agent_turns, analyst,
  * coverage_check, synthesis, grounding_gate, persist.
+ * (Per-component sub-stages — analyst_agent, search_agent, synthesis_agent,
+ * dossier_writer, signal_writer, run_finalizer, pipeline, pipeline_end_to_end,
+ * brief_clarify, brief_created — are also accepted so each component can log
+ * its own lifecycle without colliding with the canonical pipeline stages.)
  *
  * Long fields (brief content, evidence text, dossier prose) truncated to 200 chars.
  * Full content belongs in the audit row, not the log line.
@@ -23,12 +27,22 @@ export interface LogEntry {
   stage:
     | 'request_trigger'
     | 'brief_normalize'
+    | 'brief_clarify'
+    | 'brief_created'
     | 'search_agent_turns'
+    | 'search_agent'
     | 'analyst'
+    | 'analyst_agent'
     | 'coverage_check'
     | 'synthesis'
+    | 'synthesis_agent'
     | 'grounding_gate'
-    | 'persist';
+    | 'persist'
+    | 'dossier_writer'
+    | 'signal_writer'
+    | 'run_finalizer'
+    | 'pipeline'
+    | 'pipeline_end_to_end';
   /** Outcome of this stage */
   status: 'pending' | 'running' | 'completed' | 'failed' | 'clarify' | 'aborted';
   /** Wall-clock latency in milliseconds */
@@ -87,7 +101,6 @@ export function log(entry: LogEntry): void {
   if (entry.error !== undefined) out.error = entry.error;
   if (entry.extra !== undefined) out.extra = truncateDeep(entry.extra);
 
-  // eslint-disable-next-line no-console
   console.log(JSON.stringify(out));
 }
 

@@ -21,6 +21,7 @@ import { Ajv2020 } from 'ajv/dist/2020.js';
 import type { Brief, Dossier, Signal } from './types.js';
 import { getSignalsByRunId, writeAudit } from './db.js';
 import { logCompleted, logError } from './log.js';
+import { isDeterministicLLMMode, deterministicDossier } from './deterministic_llm.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DOSSIER_SCHEMA_PATH = join(__dirname, '../schemas/dossier.schema.json');
@@ -90,14 +91,26 @@ export async function runSynthesisAgent(
       )
       .join('\n');
 
-    let rawDossier = await generateDossier(
-      runId,
-      model,
-      opts,
-      signalContext,
-      slotList,
-      brief.slots.map((s) => s.slot_name)
-    );
+    const slotNames = brief.slots.map((s) => s.slot_name);
+
+    let rawDossier: unknown;
+
+    if (isDeterministicLLMMode()) {
+      rawDossier = deterministicDossier(brief, signals);
+      await writeAudit(runId, 'synthesis_dossier_generated', {
+        latency_ms: 0,
+        model: 'deterministic-stub',
+      });
+    } else {
+      rawDossier = await generateDossier(
+        runId,
+        model,
+        opts,
+        signalContext,
+        slotList,
+        slotNames
+      );
+    }
 
     let validated = validateDossierObject(rawDossier);
 
@@ -307,7 +320,7 @@ async function generateDossier(
   let parsed: unknown;
   try {
     parsed = JSON.parse(cleaned);
-  } catch (e) {
+  } catch {
     throw new Error(`Invalid JSON from model: ${cleaned.slice(0, 200)}`);
   }
 

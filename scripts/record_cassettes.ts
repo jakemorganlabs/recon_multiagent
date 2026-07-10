@@ -51,7 +51,7 @@ async function main(): Promise<void> {
 
   const evalCase = JSON.parse(readFileSync(caseFile, 'utf8')) as {
     id: string;
-    request: { target_name: string; slots: any[] };
+    request: { target_name: string; slots: Array<{ slot_name: string; required: boolean; question: string }> };
   };
 
   console.error(`[record] Recording case: ${evalCase.id}`);

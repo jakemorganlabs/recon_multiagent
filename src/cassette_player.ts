@@ -24,6 +24,10 @@ import {
   loadFetchCassette,
 } from './cassette.js';
 
+// Re-export so callers (e.g. scripts/record_cassettes.ts) can import the
+// cassette mode from the player surface alongside the player functions.
+export { getCassetteMode } from './cassette.js';
+
 export interface CassettePlayerOptions {
   caseId: string;
   searchOpts: SearchAdapterOptions;

@@ -21,9 +21,9 @@
         "question": "What is the funding history and latest valuation?"
       },
       {
-        "slot_name": "market",
+        "slot_name": "recent_news",
         "required": false,
-        "question": "What is the target market and competitive landscape?"
+        "question": "What is the target market, competitive landscape, and recent news?"
       },
       {
         "slot_name": "products",
@@ -50,7 +50,7 @@
       "should_fill": true,
       "min_confidence": 0.8
     },
-    "market": {
+    "recent_news": {
       "should_fill": true,
       "min_confidence": 0.5
     },

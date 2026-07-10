@@ -7,12 +7,10 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { readFileSync, existsSync, rmSync, mkdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, rmSync } from 'node:fs';
 import {
   getCassetteMode,
   cassetteDir,
-  ensureDir,
   urlHash,
   queryHash,
   saveSearchCassette,
@@ -27,7 +25,6 @@ import {
 } from '../src/cassette.js';
 
 const TEST_CASE_ID = 'test-case-01';
-const TEST_ROOT = join(process.cwd(), 'fixtures/cassettes');
 
 describe('cassette.ts', () => {
   beforeEach(() => {

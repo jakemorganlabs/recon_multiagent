@@ -26,6 +26,7 @@ import { recordToolCall, countToolCalls } from './tool_call_writer.js';
 import { persistEvidence } from './evidence_writer.js';
 import { updateRunStatus, writeAudit } from './db.js';
 import { logCompleted, logError } from './log.js';
+import { isDeterministicLLMMode, deterministicSearchQueries } from './deterministic_llm.js';
 import type { EvidenceItem, Brief } from './types.js';
 
 export interface SearchAgentOptions {
@@ -89,7 +90,9 @@ export async function runSearchAgent(
 
   try {
     // --- Step 1: Ask the model for a list of search queries ---
-    const queryList = await generateQueries(runId, brief, opts);
+    const queryList = isDeterministicLLMMode()
+      ? deterministicSearchQueries(brief, opts.cassetteCaseId)
+      : await generateQueries(runId, brief, opts);
 
     // --- Step 2: Execute searches with budget guards ---
     for (const query of queryList) {
@@ -295,7 +298,7 @@ Generate up to ${Math.min(5, opts.budgets.max_queries_per_run)} search queries t
   let parsed: unknown;
   try {
     parsed = JSON.parse(cleaned);
-  } catch (e) {
+  } catch {
     throw new Error(`Invalid JSON from model: ${cleaned.slice(0, 200)}`);
   }
 

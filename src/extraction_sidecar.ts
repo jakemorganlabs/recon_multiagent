@@ -38,7 +38,7 @@ export function extractMainContent(html: string, _url?: string): ExtractionResul
   text = removeComments(text);
 
   // 4. Find the best content container
-  let content = extractTagContent(text, 'article')
+  const content = extractTagContent(text, 'article')
     ?? extractTagContent(text, 'main')
     ?? extractTagContent(text, 'body')
     ?? text;

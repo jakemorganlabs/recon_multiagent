@@ -8,10 +8,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "migrate": "node --experimental-strip-types scripts/migrate.ts",
-    "lint": "eslint src/**/*.ts",
-    "eval": "node --experimental-strip-types evals/run.ts",
-    "eval:fixtures": "node --experimental-strip-types scripts/generate_eval_fixtures.ts",
-    "record": "CASSETTE_MODE=record node --experimental-strip-types scripts/record_cassettes.ts"
+    "lint": "eslint .",
+    "eval": "node --experimental-strip-types --import ./scripts/ts-register.mjs evals/run.ts",
+    "eval:fixtures": "node --experimental-strip-types --import ./scripts/ts-register.mjs scripts/generate_eval_fixtures.ts",
+    "record": "CASSETTE_MODE=record node --experimental-strip-types --import ./scripts/ts-register.mjs scripts/record_cassettes.ts"
   },
   "keywords": [
     "multi-agent",
@@ -29,6 +29,7 @@
     "@types/pg": "^8.20.0",
     "eslint": "^9.0.0",
     "typescript": "^5.7.0",
+    "typescript-eslint": "^8.63.0",
     "vitest": "^2.1.0"
   },
   "dependencies": {

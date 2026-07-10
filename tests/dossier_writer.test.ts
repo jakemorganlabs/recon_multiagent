@@ -10,13 +10,21 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { writeDossier, getDossierByRunId } from '../src/dossier_writer.js';
+import { getPool } from '../src/db.js';
 import type { Dossier } from '../src/types.js';
 
-// Mock db.js — each test sets up pool.query via getPool mock
+// A minimal pg query-result shape used by the mock pool.
+interface QueryResult {
+  rows: { id?: string; executive_summary?: string; sections?: unknown; grounding_passed?: boolean }[];
+  rowCount?: number;
+}
+
+// Mock db.js — each test sets up pool.query via getPool mock.
 vi.mock('../src/db.js', async () => {
+  const queryMock = vi.fn().mockResolvedValue({ rows: [] } as QueryResult);
   return {
     writeAudit: vi.fn().mockResolvedValue(undefined),
-    getPool: vi.fn().mockReturnValue({ query: vi.fn() }),
+    getPool: vi.fn().mockReturnValue({ query: queryMock }),
   };
 });
 
@@ -26,6 +34,12 @@ vi.mock('../src/log.js', async () => {
     logError: vi.fn().mockResolvedValue(undefined),
   };
 });
+
+/** Typed accessor for the mocked pool.query so mockResolvedValue calls type-check. */
+function queryMock(): ReturnType<typeof vi.fn> {
+  const pool = getPool() as unknown as { query: ReturnType<typeof vi.fn> };
+  return pool.query;
+}
 
 function makeDossier(opts?: { sections?: Dossier['sections']; groundingPassed?: boolean }): Dossier {
   return {
@@ -43,9 +57,7 @@ function makeDossier(opts?: { sections?: Dossier['sections']; groundingPassed?: 
 
 describe('Dossier Writer', () => {
   it('persists a valid dossier and returns a db_id', async () => {
-    const { getPool } = await import('../src/db.js');
-    const pool = getPool();
-    vi.mocked(pool.query).mockResolvedValue({ rows: [{ id: 'dbid-123' }] });
+    queryMock().mockResolvedValue({ rows: [{ id: 'dbid-123' }] } as QueryResult);
 
     const dossier = makeDossier();
     const result = await writeDossier('run-dw-01', dossier);
@@ -69,9 +81,7 @@ describe('Dossier Writer', () => {
   });
 
   it('reads back a persisted dossier', async () => {
-    const { getPool } = await import('../src/db.js');
-    const pool = getPool();
-    vi.mocked(pool.query).mockResolvedValue({
+    queryMock().mockResolvedValue({
       rows: [
         {
           executive_summary: 'Test summary.',
@@ -85,7 +95,7 @@ describe('Dossier Writer', () => {
           grounding_passed: true,
         },
       ],
-    });
+    } as QueryResult);
 
     const dossier = await getDossierByRunId('run-dw-03');
     expect(dossier).not.toBeNull();
@@ -95,20 +105,16 @@ describe('Dossier Writer', () => {
   });
 
   it('returns null when no dossier exists for run_id', async () => {
-    const { getPool } = await import('../src/db.js');
-    const pool = getPool();
-    vi.mocked(pool.query).mockResolvedValue({ rows: [] });
+    queryMock().mockResolvedValue({ rows: [] } as QueryResult);
 
     const dossier = await getDossierByRunId('run-dw-04');
     expect(dossier).toBeNull();
   });
 
   it('upserts on duplicate run_id (does not throw)', async () => {
-    const { getPool } = await import('../src/db.js');
-    const pool = getPool();
-    vi.mocked(pool.query)
-      .mockResolvedValueOnce({ rows: [{ id: 'dbid-111' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 'dbid-222' }] });
+    queryMock()
+      .mockResolvedValueOnce({ rows: [{ id: 'dbid-111' }] } as QueryResult)
+      .mockResolvedValueOnce({ rows: [{ id: 'dbid-222' }] } as QueryResult);
 
     const dossier = makeDossier();
     await writeDossier('run-dw-05', dossier);

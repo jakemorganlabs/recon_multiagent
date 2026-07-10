@@ -6,7 +6,7 @@
     "title": "About Northwind Robotics",
     "latencyMs": 0,
     "status": "ok",
-    "recordedAt": "2026-07-06T01:40:00.771Z",
+    "recordedAt": "2026-07-10T06:16:28.492Z",
     "version": "v1"
   },
   {
@@ -16,7 +16,7 @@
     "title": "Leadership Team",
     "latencyMs": 0,
     "status": "ok",
-    "recordedAt": "2026-07-06T01:40:00.771Z",
+    "recordedAt": "2026-07-10T06:16:28.492Z",
     "version": "v1"
   },
   {
@@ -26,7 +26,17 @@
     "title": "Northwind Robotics raises $35M in Series C",
     "latencyMs": 0,
     "status": "ok",
-    "recordedAt": "2026-07-06T01:40:00.771Z",
+    "recordedAt": "2026-07-10T06:16:28.492Z",
+    "version": "v1"
+  },
+  {
+    "url": "https://www.northwindrobotics.com/news",
+    "htmlDigest": "79ecc297",
+    "extractedText": "Northwind Robotics competes in the industrial automation market alongside KUKA, Universal Robots, and FANUC. Recent news: the company expanded into warehouse logistics and launched an AI-powered predictive maintenance platform.",
+    "title": "Northwind Robotics — News",
+    "latencyMs": 0,
+    "status": "ok",
+    "recordedAt": "2026-07-10T06:16:28.492Z",
     "version": "v1"
   },
   {
@@ -36,7 +46,7 @@
     "title": "Products",
     "latencyMs": 0,
     "status": "ok",
-    "recordedAt": "2026-07-06T01:40:00.771Z",
+    "recordedAt": "2026-07-10T06:16:28.492Z",
     "version": "v1"
   },
   {
@@ -46,7 +56,7 @@
     "title": "Northwind Robotics — PitchBook Profile",
     "latencyMs": 0,
     "status": "ok",
-    "recordedAt": "2026-07-06T01:40:00.771Z",
+    "recordedAt": "2026-07-10T06:16:28.492Z",
     "version": "v1"
   }
 ]

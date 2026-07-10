@@ -125,7 +125,7 @@ async function callExtraction(
 
   try {
     return JSON.parse(content);
-  } catch (e) {
+  } catch {
     throw new Error(`DeepInfra returned invalid JSON: ${content.slice(0, 200)}`);
   }
 }

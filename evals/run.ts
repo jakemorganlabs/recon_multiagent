@@ -15,7 +15,7 @@
 
 import { readFileSync, readdirSync, existsSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execSync } from 'node:child_process';
 import type { EvalCase, EvalCaseResult, MetricResults, ThresholdConfig } from './types.js';
 import { computeRecallAtK } from './metrics/recall.js';
@@ -146,8 +146,9 @@ async function resetDb(): Promise<void> {
 async function runCase(c: EvalCase): Promise<EvalCaseResult> {
   const caseStart = Date.now();
 
-  // Force cassette play mode
+  // Force cassette play mode + expose case id to the deterministic LLM stub
   process.env.CASSETTE_MODE = 'play';
+  process.env.EVAL_CASE_ID = c.id;
 
   const pipelineOpts = {
     deepinfra: {
@@ -395,8 +396,10 @@ function passFail(ok: boolean): string {
   return ok ? 'PASS' : 'FAIL';
 }
 
-// Run if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Run if called directly. Normalize argv[1] to a file:// URL so the
+// comparison holds on hosts whose absolute paths contain characters that
+// import.meta.url encodes (e.g. spaces -> %20).
+if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
   main().then((code) => process.exit(code)).catch((err) => {
     console.error(err);
     process.exit(1);

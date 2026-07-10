@@ -55,7 +55,7 @@ const NORTHWIND_SLOTS = [
   { slot_name: 'overview', required: true, question: 'What is the company overview and mission?' },
   { slot_name: 'leadership', required: true, question: 'Who are the key executives and leadership team?' },
   { slot_name: 'funding', required: true, question: 'What is the funding history and latest valuation?' },
-  { slot_name: 'market', required: false, question: 'What is the target market and competitive landscape?' },
+  { slot_name: 'recent_news', required: false, question: 'What is the target market, competitive landscape, and recent news?' },
   { slot_name: 'products', required: true, question: 'What are the main products or services?' },
 ];
 
@@ -80,7 +80,7 @@ for (let i = 1; i <= 10; i++) {
       overview: { shouldFill: true, minConfidence: 0.7 },
       leadership: { shouldFill: true, minConfidence: 0.6 },
       funding: { shouldFill: true, minConfidence: 0.8 },
-      market: { shouldFill: true, minConfidence: 0.5 },
+      recent_news: { shouldFill: true, minConfidence: 0.5 },
       products: { shouldFill: true, minConfidence: 0.7 },
     },
     expectedStatus: 'complete',
@@ -109,6 +109,13 @@ for (let i = 1; i <= 10; i++) {
         ],
       },
       {
+        query: 'Northwind Robotics recent news market',
+        status: 'ok',
+        results: [
+          { title: 'Northwind Robotics — News', url: 'https://www.northwindrobotics.com/news', description: 'Market and competitive news.' },
+        ],
+      },
+      {
         query: 'Northwind Robotics products services',
         status: 'ok',
         results: [
@@ -133,6 +140,12 @@ for (let i = 1; i <= 10; i++) {
         url: 'https://techcrunch.com/2024/01/northwind-robotics-funding.html',
         title: 'Northwind Robotics raises ' + amount + ' in ' + fundingRound,
         text: `Northwind Robotics announced today that it has raised ${amount} in ${fundingRound} funding led by Andreessen Horowitz. Total valuation reached ${amount}.`,
+        status: 'ok',
+      },
+      {
+        url: 'https://www.northwindrobotics.com/news',
+        title: 'Northwind Robotics — News',
+        text: `Northwind Robotics competes in the industrial automation market alongside KUKA, Universal Robots, and FANUC. Recent news: the company expanded into warehouse logistics and launched an AI-powered predictive maintenance platform.`,
         status: 'ok',
       },
       {

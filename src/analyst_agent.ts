@@ -26,6 +26,7 @@ import { Ajv2020 } from 'ajv/dist/2020.js';
 import type { Brief, Signal, EvidenceItem } from './types.js';
 import { writeAudit } from './db.js';
 import { logCompleted, logError } from './log.js';
+import { isDeterministicLLMMode, deterministicSignals } from './deterministic_llm.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SIGNAL_SCHEMA_PATH = join(__dirname, '../schemas/signal.schema.json');
@@ -98,14 +99,25 @@ export async function runAnalystAgent(
       )
       .join('\n');
 
-    let rawSignals = await generateSignals(
-      runId,
-      model,
-      opts,
-      evidenceContext,
-      slotList,
-      brief.slots.length
-    );
+    let rawSignals: unknown[];
+
+    if (isDeterministicLLMMode()) {
+      rawSignals = deterministicSignals(brief, evidence, runId);
+      await writeAudit(runId, 'analyst_signals_generated', {
+        raw_count: rawSignals.length,
+        latency_ms: 0,
+        model: 'deterministic-stub',
+      });
+    } else {
+      rawSignals = await generateSignals(
+        runId,
+        model,
+        opts,
+        evidenceContext,
+        slotList,
+        brief.slots.length
+      );
+    }
 
     let validated = validateSignalArray(rawSignals);
 
@@ -283,7 +295,7 @@ async function generateSignals(
   let parsed: unknown;
   try {
     parsed = JSON.parse(cleaned);
-  } catch (e) {
+  } catch {
     throw new Error(`Invalid JSON from model: ${cleaned.slice(0, 200)}`);
   }
 

@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { createHmac } from 'node:crypto';
 import { handleRequest } from '../src/handler.js';
 
 describe('handleRequest', () => {
@@ -14,7 +15,6 @@ describe('handleRequest', () => {
   const hmacSecret = 'test-hmac-secret-32-bytes-long-key!!!';
 
   function buildAuth(method: string, path: string, body: string, timestampSec?: number): string {
-    const { createHmac } = require('node:crypto');
     const ts = timestampSec ?? Math.floor(Date.now() / 1000);
     const bodyHash = createHmac('sha256', hmacSecret).update(body).digest('hex');
     const canonicalPath = path.replace(/\/{2,}/g, '/').replace(/\/+$/, '') || '/';
