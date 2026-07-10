@@ -88,8 +88,11 @@ export async function runPipeline(
   const start = performance.now();
   const model = opts.deepinfra.model ?? 'google/gemma-4-26B-A4B-it';
 
-  // Step 0: Create run record
-  const requestHash = hashRequest(request);
+  // Step 0: Create run record.
+  // The caseId is folded into the request hash so repeated eval cases that
+  // share an identical request body (e.g. the 10 northwind variants) still
+  // get distinct run rows and don't collide on the unique request_hash index.
+  const requestHash = hashRequest(request, caseId);
   const runId = await createRun(requestHash, request.target_name);
   await updateRunStatus(runId, 'running');
 
@@ -220,6 +223,11 @@ export async function runPipeline(
   }
 }
 
-function hashRequest(request: unknown): string {
-  return createHash('sha256').update(JSON.stringify(request)).digest('hex');
+function hashRequest(request: unknown, caseId?: string): string {
+  // Including caseId (when provided) gives each eval case a unique hash even
+  // when request bodies are identical, preventing request_hash collisions
+  // across cases that share a template. For live runs the caller still
+  // controls the key, so idempotency semantics are preserved.
+  const payload = caseId ? `${caseId}::${JSON.stringify(request)}` : JSON.stringify(request);
+  return createHash('sha256').update(payload).digest('hex');
 }
