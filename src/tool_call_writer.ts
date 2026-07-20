@@ -1,29 +1,27 @@
 /**
- * Tool Call Persistence
+ * Tool call persistence.
  *
  * Every invocation of search or fetch writes a `tool_call` row matching
  * the S01 migration schema (005_tool_call.sql).
- *
- *
  */
 
 import { getPool } from './db.js';
 
 export interface RecordToolCallInput {
   run_id: string;
-  /** Which agent made the call */
+  /** Which agent made the call. */
   agent: 'search_agent' | 'analyst_agent' | 'synthesis_agent';
-  /** Tool name — search or fetch */
+  /** Tool name. search or fetch. */
   tool_name: 'search' | 'fetch';
-  /** The search query (optional for fetch calls) */
+  /** The search query (optional for fetch calls). */
   query?: string;
-  /** Full request payload */
+  /** Full request payload. */
   request: unknown;
-  /** Full response payload */
+  /** Full response payload. */
   response?: unknown;
-  /** Wall-clock duration in ms */
+  /** Wall-clock duration in ms. */
   duration_ms: number;
-  /** Outcome status */
+  /** Outcome status. */
   status: 'ok' | 'error' | 'timeout' | 'rate_limited';
 }
 

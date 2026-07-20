@@ -1,12 +1,12 @@
 /**
- * Pricing Loader
+ * Pricing loader.
  *
- * Loads config/pricing.json and checks freshness.
- * Logs a pricing_stale warning if as_of is > 90 days old.
- * Never contains keys, URLs, or tokens — only rates.
+ * Loads config/pricing.json and checks freshness. Logs a pricing_stale warning
+ * if as_of is more than 90 days old. Never contains keys, URLs, or tokens,
+ * only rates.
  *
- * Invariant: if a price is requested for a model not in the config,
- * the caller receives a clear error so the config must be maintained.
+ * Invariant: if a price is requested for a model not in the config, the
+ * caller receives a clear error so the config must be maintained.
  */
 
 import { readFileSync } from 'node:fs';
@@ -67,7 +67,7 @@ function isStale(config: PricingConfig): boolean {
 
 /**
  * Calculate cost for a single model call in USD.
- * Gemma does not support prompt caching — cache columns are zero.
+ * Gemma does not support prompt caching, so cache columns are zero.
  */
 export function computeCallCost(
   config: PricingConfig,

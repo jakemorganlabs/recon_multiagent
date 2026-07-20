@@ -47,10 +47,10 @@ const DEFAULT_DENYLIST = [
  * Fetch a URL with all safeguards applied.
  *
  * Steps:
- * 1. Scheme check — must be http: or https:
- * 2. Domain policy — allowlist membership, denylist match, RFC1918 test
+ * 1. Scheme check. Must be http: or https:
+ * 2. Domain policy. allowlist membership, denylist match, RFC1918 test
  * 3. HEAD Content-Length check against maxBytes
- * 4. If all pass → GET with timeout, byte-truncate if needed
+ * 4. If all pass, GET with timeout and byte-truncate if needed
  */
 export async function fetchWeb(
   url: string,
@@ -64,7 +64,7 @@ export async function fetchWeb(
 
   const start = performance.now();
 
-  // --- 1. Scheme check ---
+  // Scheme check.
   let parsed: URL;
   try {
     parsed = new URL(url);
@@ -88,7 +88,7 @@ export async function fetchWeb(
     };
   }
 
-  // --- 2. Domain policy ---
+  // Domain policy.
   const domain = parsed.hostname.toLowerCase();
 
   if (denyPrivate && isPrivateOrLoopback(domain)) {
@@ -122,7 +122,7 @@ export async function fetchWeb(
     };
   }
 
-  // --- 3. HEAD Content-Length check ---
+  // HEAD Content-Length check.
   try {
     const headRes = await fetchWithTimeout(url, { method: 'HEAD', timeoutMs: 5000 });
     if (headRes) {
@@ -141,10 +141,10 @@ export async function fetchWeb(
       }
     }
   } catch {
-    // HEAD is optional — proceed to GET if HEAD fails
+    // HEAD is optional. Proceed to GET if HEAD fails.
   }
 
-  // --- 4. GET with timeout and byte cap ---
+  // GET with timeout and byte cap.
   try {
     const res = await fetchWithTimeout(url, { method: 'GET', timeoutMs });
     if (!res) {

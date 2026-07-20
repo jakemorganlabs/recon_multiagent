@@ -28,7 +28,7 @@
       "type": "n8n-nodes-base.code",
       "version": 1,
       "position": [650, 300],
-      "jsCode": "// Health check response — no model invocation\nconst lastRunAge = $input.first().json.last_run_age_sec ?? -1;\nreturn [\n  {\n    json: {\n      db: 'ok',\n      config: 'ok',\n      last_run_age_sec: lastRunAge\n    }\n  }\n];\n"
+      "jsCode": "const lastRunAge = $input.first().json.last_run_age_sec ?? -1;\nreturn [\n  {\n    json: {\n      db: 'ok',\n      config: 'ok',\n      last_run_age_sec: lastRunAge\n    }\n  }\n];\n"
     }
   ],
   "connections": {

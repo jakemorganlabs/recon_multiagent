@@ -1,12 +1,10 @@
 /**
- * Cassette Player — Interceptor for Web Tool Calls
+ * Cassette player: interceptor for web tool calls.
  *
  * Wraps searchWeb() and fetchWeb() so that:
- *   CASSETTE_MODE=record → passes through to live web, then writes to cassette
- *   CASSETTE_MODE=play   → returns cached response from cassette; on miss → empty/error
- *   CASSETTE_MODE=off    → passes through to live web
- *
- *
+ *   CASSETTE_MODE=record  passes through to live web, then writes to cassette
+ *   CASSETTE_MODE=play    returns cached response from cassette; on miss returns empty/error
+ *   CASSETTE_MODE=off     passes through to live web
  */
 
 import { searchWeb, type SearchAdapterOptions } from './search_adapter.js';
@@ -110,7 +108,7 @@ export async function searchWebWithCassette(
     };
   }
 
-  // record or off — pass through to live
+  // record or off: pass through to live
   const result = await searchWeb(query, opts);
 
   if (mode === 'record') {
@@ -165,7 +163,7 @@ export async function fetchWebWithCassette(
     };
   }
 
-  // record or off — pass through to live
+  // record or off: pass through to live
   const result = await fetchWeb(url, opts);
 
   if (mode === 'record') {

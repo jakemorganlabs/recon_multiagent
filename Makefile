@@ -1,4 +1,4 @@
-# Recon Multi-Agent — Makefile
+# Recon Multi-Agent Makefile.
 # Commands for hooks, gates, cost reporting, smoke tests, and release dry-run.
 
 .PHONY: hooks gate cost-month metabase-up smoke eval-prod release-dryrun help

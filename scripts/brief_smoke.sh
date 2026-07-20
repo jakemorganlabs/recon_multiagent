@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Smoke test for Session S02 — Brief & Shared State
+# Smoke test for Brief & Shared State.
 # Three cases: happy path, idempotency, clarification.
 #
 # Requires: curl, DATABASE_URL, HMAC_SECRET, DEEPINFRA_API_KEY set in environment.
@@ -74,7 +74,7 @@ if [ "$STATUS2" != "existing" ]; then
 fi
 
 if [ "$RUN_ID1" != "$RUN_ID2" ]; then
-  echo "FAIL: Idempotency violation — run_id mismatch ($RUN_ID1 vs $RUN_ID2)"
+  echo "FAIL: Idempotency violation. run_id mismatch ($RUN_ID1 vs $RUN_ID2)"
   exit 1
 fi
 echo "PASS: duplicate request returned same run_id='$RUN_ID2'"

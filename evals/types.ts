@@ -65,16 +65,16 @@ export interface EvalCaseResult {
 export interface MetricResults {
   /** Metric 1: evidence recall@k */
   recallAtK: { numerator: number; denominator: number; value: number };
-  /** Metric 2: structural validity — per-agent pass rates */
+  /** Metric 2: structural validity. Per-agent pass rates. */
   structuralValidity: {
     brief: number;
     analyst: number;
     synthesis: number;
     overall: number;
   };
-  /** Metric 3: grounding integrity — recast rate */
+  /** Metric 3: grounding integrity. Recast rate. */
   groundingIntegrity: { recast: number; total: number; rate: number };
-  /** Metric 4: gap correctness — confusion matrix */
+  /** Metric 4: gap correctness. Confusion matrix. */
   gapCorrectness: {
     tp: number; // filled-should-fill
     tn: number; // abstained-should-abstain

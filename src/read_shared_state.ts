@@ -1,15 +1,13 @@
 /**
- * Read Shared State Tool
+ * Read shared state tool.
  *
- * The ONLY tool available to the Analyst Agent (and later, Synthesis Agent).
+ * The only tool available to the Analyst Agent (and later, Synthesis Agent).
  * Takes a run_id and returns the evidence rows the Search Agent gathered.
- * There is NO path to the open web from this tool.
+ * There is no path to the open web from this tool.
  *
- * This is what makes the Analyst "sealed from the web" — not a prompt
- * instruction the model might forget, but a structural property of the
- * tool binding: the Analyst node has only this tool, so it cannot fetch.
- *
- *
+ * This is what makes the Analyst "sealed from the web": not a prompt
+ * instruction the model might forget, but a structural property of the tool
+ * binding. The Analyst node has only this tool, so it cannot fetch.
  */
 
 import { getPool } from './db.js';
@@ -17,9 +15,9 @@ import type { EvidenceItem } from './types.js';
 
 export interface ReadSharedStateInput {
   run_id: string;
-  /** Optional: only return evidence matching this query substring */
+  /** Optional. Only return evidence matching this query substring. */
   queryFilter?: string;
-  /** Optional: limit number of evidence items returned (oldest first) */
+  /** Optional. Limit number of evidence items returned (oldest first). */
   limit?: number;
 }
 

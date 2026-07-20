@@ -40,7 +40,7 @@ export interface BriefNormalizerOptions {
   model?: string;
   /** Max tokens for the extraction call */
   maxTokens?: number;
-  /** Temperature — always 0 for deterministic extraction */
+  /** Temperature. Always 0 for deterministic extraction. */
   temperature?: number;
 }
 
@@ -188,7 +188,7 @@ export async function normalizeBrief(
     };
   }
 
-  // Second failure — treat as failed
+  // Second failure. Treat as failed.
   const errors2 = validateBrief.errors ?? [{ message: 'Unknown validation error' }];
   const errorText2 = errors2.map((e) => `${('instancePath' in e ? e.instancePath : '???')} ${e.message}`).join('; ');
   throw new Error(`Brief extraction failed schema validation after repair: ${errorText2}`);

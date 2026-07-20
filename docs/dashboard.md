@@ -1,16 +1,16 @@
-# Dashboard Build Sheet — Metabase over Postgres
+# Dashboard build sheet (Metabase over Postgres)
 
-> Operator guide: for each widget below, paste the SQL into a Metabase Native Query question, set the visualization type, and place on the dashboard. Each widget links to a S17.3 metric.
+For each widget below, paste the SQL into a Metabase Native Query question, set the visualization type, and place it on the dashboard.
 
 ## Database
 
-Connect Metabase to the same Postgres the audit / shared-state DB lives on (S02). If n8n Cloud's internal Postgres is not directly queryable, the operator should have provisioned an external Postgres as the audit DB.
+Connect Metabase to the same Postgres the audit / shared-state DB lives on. If n8n Cloud's internal Postgres is not directly queryable, the operator provisions an external Postgres as the audit DB.
 
-## Indexes (required — run before dashboard queries)
+## Indexes (required before dashboard queries)
 
 ```sql
 -- Migration 010 adds these indexes automatically via migrations/010_audit_cost_columns.sql
--- These are also reproduced here for operator reference:
+-- Reproduced here for operator reference:
 
 CREATE INDEX IF NOT EXISTS idx_audit_created_at_status
   ON audit (created_at DESC, (payload->>'status'));
@@ -19,11 +19,7 @@ CREATE INDEX IF NOT EXISTS idx_audit_slot_name
   ON audit ((payload->>'slot_name'));
 ```
 
----
-
-## Widget 1 — Runs over time + status mix
-
-**SQL:**
+## Widget 1: Runs over time + status mix
 
 ```sql
 SELECT
@@ -36,15 +32,11 @@ GROUP BY 1, 2
 ORDER BY 1 DESC, 2;
 ```
 
-**Visualization:** Line or Bar (grouped by status).
+Visualization: line or bar, grouped by status.
 
-**Alert threshold (S17.3):** `failed` runs > 5% of total daily volume → notify operator.
+Alert threshold: `failed` runs > 5% of total daily volume. Notify operator.
 
----
-
-## Widget 2 — Gap rate per slot
-
-**SQL:**
+## Widget 2: Gap rate per slot
 
 ```sql
 WITH slot_fills AS (
@@ -65,15 +57,11 @@ FROM slot_fills
 ORDER BY gap_rate_pct DESC;
 ```
 
-**Visualization:** Bar chart.
+Visualization: bar chart.
 
-**Alert threshold (S17.3):** Any slot gap rate > 40% → investigate slot question clarity.
+Alert threshold: any slot gap rate > 40%. Investigate slot question clarity.
 
----
-
-## Widget 3 — Coverage iteration rate
-
-**SQL:**
+## Widget 3: Coverage iteration rate
 
 ```sql
 SELECT
@@ -87,15 +75,11 @@ GROUP BY r.coverage_iterations
 ORDER BY r.coverage_iterations;
 ```
 
-**Visualization:** Pie or Bar.
+Visualization: pie or bar.
 
-**Alert threshold (S17.3):** > 30% of runs hit max_iterations (3) → tune coverage confidence_floor.
+Alert threshold: more than 30% of runs hit max_iterations (3). Tune the coverage confidence_floor.
 
----
-
-## Widget 4 — Evidence / fetch volume per run
-
-**SQL:**
+## Widget 4: Evidence and fetch volume per run
 
 ```sql
 SELECT
@@ -112,15 +96,11 @@ ORDER BY evidence_total DESC
 LIMIT 50;
 ```
 
-**Visualization:** Table.
+Visualization: table.
 
-**Alert threshold (S17.3):** Any run with 0 fetches but `status = 'complete'` → flag as potential grounding failure.
+Alert threshold: any run with 0 fetches but `status = 'complete'`. Flag as a potential grounding failure.
 
----
-
-## Widget 5 — Grounding recast rate
-
-**SQL:**
+## Widget 5: Grounding recast rate
 
 ```sql
 SELECT
@@ -135,15 +115,11 @@ GROUP BY 1
 ORDER BY 1 DESC;
 ```
 
-**Visualization:** Line.
+Visualization: line.
 
-**Alert threshold (S17.3):** Grounding recast rate > 10% → investigate evidence quality or analyst prompt.
+Alert threshold: grounding recast rate > 10%. Investigate evidence quality or analyst prompt.
 
----
-
-## Widget 6 — Cost p50 / p95 per run
-
-**SQL:**
+## Widget 6: Cost p50 / p95 per run
 
 ```sql
 WITH run_costs AS (
@@ -164,15 +140,11 @@ SELECT
 FROM run_costs;
 ```
 
-**Visualization**: Scalar (two numbers).
+Visualization: scalar (two numbers).
 
-**Alert threshold (S17.3):** p95 cost > $0.50 per run → investigate token bloat or coverage loop overshoot.
+Alert threshold: p95 cost > $0.50 per run. Investigate token bloat or coverage loop overshoot.
 
----
-
-## Widget 7 — Cache savings rate (future-ready)
-
-**SQL:**
+## Widget 7: Cache savings rate (future-ready)
 
 ```sql
 SELECT
@@ -188,16 +160,14 @@ FROM audit
 WHERE created_at >= CURRENT_DATE - INTERVAL '30 days';
 ```
 
-**Visualization:** Scalar (percentage).
+Visualization: scalar percentage.
 
-**Note:** For Gemma 4 on DeepInfra, cache read/write columns are currently zero (Gemma does not support prompt caching). This widget exists to demonstrate the metric structure for the operator if models are swapped later.
+Gemma 4 on DeepInfra has no prompt caching, so cache read and write columns stay zero. This widget shows the metric structure for a future model swap.
 
-**Alert threshold (S17.3):** If a future model supports caching: savings rate < 20% → review cache key patterns.
+Alert threshold (if a future model supports caching): savings rate < 20%. Review cache key patterns.
 
----
-
-## Dashboard Refresh
+## Dashboard refresh
 
 - Metabase auto-refresh: every 1 hour.
-- Operator should set daily email summary if SMTP is configured in Metabase.
-- Sensitive data: audit table may contain target names. Ensure Metabase access is restricted to operator accounts only.
+- Operator sets a daily email summary if SMTP is configured in Metabase.
+- The audit table may contain target names. Restrict Metabase access to operator accounts only.

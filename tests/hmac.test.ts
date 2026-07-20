@@ -30,7 +30,7 @@ describe('verifyRequestHmac', () => {
       path: '/api/request',
       body,
       authorization: 'HMAC 1700000000:badhex0000000000000000000000000000000000000000000000000000000000',
-      nowSec: 1700000010, // 10s after timestamp — inside replay window
+      nowSec: 1700000010, // 10s after timestamp, inside replay window
     });
     expect(result.valid).toBe(false);
     expect(result.reason).toBe('Signature mismatch');

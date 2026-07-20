@@ -1,22 +1,18 @@
 /**
- * Analyst Agent
+ * Analyst Agent.
  *
- * The first agent SEALED from the open web by toolset construction.
- * Its ONLY tool is readSharedState (read evidence by run_id).
- * There is no path by which it can fetch a new page.
+ * First agent sealed from the open web by toolset construction. Its only
+ * tool is readSharedState (read evidence by run_id); there is no path by
+ * which it can fetch a new page.
  *
- * Uses DeepInfra / Gemma 4 (google/gemma-4-26B-A4B-it).
- * System prompt enforces grounded-extractor posture:
- * - fill each slot ONLY from supporting evidence
- * - cite evidence_ids for every non-abstaining signal
- * - abstain (insufficient_evidence) when evidence doesn't support
- * - never guess, never hallucinate
+ * DeepInfra / Gemma 4 (google/gemma-4-26B-A4B-it). System prompt enforces
+ * grounded-extractor posture: fill each slot only from supporting evidence,
+ * cite evidence_ids for every non-abstaining signal, abstain
+ * (insufficient_evidence) when evidence does not support, never guess, never
+ * hallucinate.
  *
- * Signal output is schema-validated against signal.schema.json.
- * One-shot repair loop on schema failure.
- * Idempotent writes keyed on (run_id, slot_name).
- *
- *
+ * Signal output is schema-validated against signal.schema.json. One-shot
+ * repair loop on schema failure. Idempotent writes keyed on (run_id, slot_name).
  */
 
 import { readFileSync } from 'node:fs';
@@ -40,9 +36,9 @@ export interface AnalystAgentOptions {
   baseUrl: string;
   /** DeepInfra API key */
   apiKey: string;
-  /** Override model (default from budgets.json) */
+  /** Override model. Default from budgets.json. */
   model?: string;
-  /** Temperature — always 0 */
+  /** Temperature. Always 0. */
   temperature?: number;
   /** Confidence floor from config */
   confidenceFloor?: number;

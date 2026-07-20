@@ -62,5 +62,5 @@ echo "Brief response:"
 echo "$RESPONSE" | jq . || echo "$RESPONSE"
 
 echo ""
-echo "Synthesis smoke complete — inspect the response JSON for brief completeness."
+echo "Synthesis smoke complete. Inspect the response JSON for brief completeness."
 echo "This is a structural smoke; full end-to-end requires signals in shared state."

@@ -70,5 +70,5 @@ if [ $EXIT_CODE -ne 0 ]; then
   echo "Workflow JSON exports must contain credential references, not literal values."
   exit 1
 else
-  echo "✅ Secret gate PASSED — no credential patterns found."
+  echo "✅ Secret gate PASSED, no credential patterns found."
 fi

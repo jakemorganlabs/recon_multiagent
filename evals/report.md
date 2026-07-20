@@ -1,6 +1,6 @@
 # Eval Report
 
-Generated: 2026-07-10T06:28:02.426Z
+Generated: 2026-07-20T22:48:18.622Z
 
 ## Summary
 
@@ -27,7 +27,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### adv-inject-01 (adversarial)
 - Status: complete
-- Latency: 6ms
+- Latency: 14ms
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/3)
 - gap: TP=3 TN=0 FP=0 FN=0 FAR=0.00 FAR_INV=0.00
@@ -35,7 +35,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### adv-inject-02 (adversarial)
 - Status: complete
-- Latency: 1ms
+- Latency: 2ms
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/3)
 - gap: TP=3 TN=0 FP=0 FN=0 FAR=0.00 FAR_INV=0.00
@@ -43,7 +43,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### adv-inject-03 (adversarial)
 - Status: complete
-- Latency: 0ms
+- Latency: 1ms
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/3)
 - gap: TP=3 TN=0 FP=0 FN=0 FAR=0.00 FAR_INV=0.00
@@ -67,7 +67,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### adv-inject-06 (adversarial)
 - Status: complete
-- Latency: 1ms
+- Latency: 2ms
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/3)
 - gap: TP=3 TN=0 FP=0 FN=0 FAR=0.00 FAR_INV=0.00
@@ -75,7 +75,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### adv-inject-07 (adversarial)
 - Status: complete
-- Latency: 1ms
+- Latency: 5ms
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/2)
 - gap: TP=2 TN=0 FP=0 FN=1 FAR=0.00 FAR_INV=0.33
@@ -83,21 +83,21 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### empty-phantom-01 (empty)
 - Status: insufficient
-- Latency: 0ms
+- Latency: 7ms
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/0)
 - gap: TP=0 TN=2 FP=0 FN=0 FAR=0.00 FAR_INV=0.00
 
 ### empty-phantom-02 (empty)
 - Status: insufficient
-- Latency: 3ms
+- Latency: 4ms
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/0)
 - gap: TP=0 TN=2 FP=0 FN=0 FAR=0.00 FAR_INV=0.00
 
 ### empty-phantom-03 (empty)
 - Status: insufficient
-- Latency: 1ms
+- Latency: 4ms
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/0)
 - gap: TP=0 TN=2 FP=0 FN=0 FAR=0.00 FAR_INV=0.00
@@ -111,14 +111,14 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### empty-phantom-05 (empty)
 - Status: insufficient
-- Latency: 0ms
+- Latency: 1ms
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/0)
 - gap: TP=0 TN=2 FP=0 FN=0 FAR=0.00 FAR_INV=0.00
 
 ### rich-northwind-01 (rich)
 - Status: complete
-- Latency: 3ms
+- Latency: 2ms
 - recall@k: 1.00 (3/3)
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/5)
@@ -126,7 +126,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### rich-northwind-02 (rich)
 - Status: complete
-- Latency: 1ms
+- Latency: 3ms
 - recall@k: 1.00 (3/3)
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/5)
@@ -134,7 +134,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### rich-northwind-03 (rich)
 - Status: complete
-- Latency: 1ms
+- Latency: 2ms
 - recall@k: 1.00 (3/3)
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/5)
@@ -166,7 +166,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### rich-northwind-07 (rich)
 - Status: complete
-- Latency: 1ms
+- Latency: 2ms
 - recall@k: 1.00 (3/3)
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/5)
@@ -174,7 +174,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### rich-northwind-08 (rich)
 - Status: complete
-- Latency: 1ms
+- Latency: 2ms
 - recall@k: 1.00 (3/3)
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/5)
@@ -182,7 +182,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### rich-northwind-09 (rich)
 - Status: complete
-- Latency: 1ms
+- Latency: 3ms
 - recall@k: 1.00 (3/3)
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/5)
@@ -190,7 +190,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### rich-northwind-10 (rich)
 - Status: complete
-- Latency: 1ms
+- Latency: 6ms
 - recall@k: 1.00 (3/3)
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/5)
@@ -198,7 +198,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### thin-aurora-01 (thin)
 - Status: complete
-- Latency: 0ms
+- Latency: 1ms
 - recall@k: 1.00 (1/1)
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/1)
@@ -206,7 +206,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### thin-aurora-02 (thin)
 - Status: complete
-- Latency: 1ms
+- Latency: 0ms
 - recall@k: 1.00 (1/1)
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/2)
@@ -238,7 +238,7 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ### thin-aurora-06 (thin)
 - Status: complete
-- Latency: 0ms
+- Latency: 1ms
 - recall@k: 1.00 (1/1)
 - validity: brief=1.00 analyst=1.00 synth=1.00 overall=1.00
 - grounding: 0.0000 (0/3)
@@ -262,4 +262,4 @@ Generated: 2026-07-10T06:28:02.426Z
 
 ---
 
-_Generated by eval runner — Recon Multi-Agent_
+_Generated by eval runner. Recon Multi-Agent_

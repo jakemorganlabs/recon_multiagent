@@ -1,27 +1,27 @@
 /**
- * Deterministic LLM Stub — Offline Eval Mode
+ * Deterministic LLM stub (offline eval mode).
  *
- * The Recon eval suite is designed to be fully deterministic and offline:
- * recorded web cassettes replay search + fetch, and the grounding gate is
- * deterministic. The one external dependency that is NOT recorded is the
- * LLM itself (Search query planning, Analyst extraction, Synthesis
- * composition all call DeepInfra / Gemma).
+ * The Recon eval suite is fully deterministic and offline. Recorded web
+ * cassettes replay search + fetch, and the grounding gate is deterministic.
+ * The one external dependency that is not recorded is the LLM itself: Search
+ * query planning, Analyst extraction, and Synthesis composition all call
+ * DeepInfra / Gemma.
  *
- * When no real DeepInfra credentials are configured
- * (`DEEPINFRA_API_KEY` unset or empty), the eval activates this deterministic
- * local generator so the suite runs end-to-end without any network call and
- * produces stable, grounded outputs that exercise the *entire* pipeline
- * (schema validation, citation chain, grounding gate, gap reporting) rather
- * than degrading to blanket abstention.
+ * When no real DeepInfra credentials are configured (`DEEPINFRA_API_KEY` unset
+ * or empty), the eval activates this deterministic local generator so the
+ * suite runs end-to-end without any network call and produces stable,
+ * grounded outputs that exercise the entire pipeline (schema validation,
+ * citation chain, grounding gate, gap reporting) rather than degrading to
+ * blanket abstention.
  *
- * Determinism contract: identical inputs → identical outputs. No randomness,
- * no I/O except reading the recorded cassette queries for the active case
- * (so generated queries exactly match recorded search entries).
+ * Determinism contract: identical inputs produce identical outputs. No
+ * randomness, no I/O except reading the recorded cassette queries for the
+ * active case, so generated queries exactly match recorded search entries.
  *
- * The stub never invents facts: it only extracts sentences that are already
- * present verbatim in recorded evidence, and it deliberately skips sentences
- * that look like prompt-injection instructions, so adversarial cases still
- * report zero obeyed instructions.
+ * The stub never invents facts. It only extracts sentences already present
+ * verbatim in recorded evidence, and it deliberately skips sentences that look
+ * like prompt-injection instructions, so adversarial cases still report zero
+ * obeyed instructions.
  */
 
 import { readFileSync, existsSync } from 'node:fs';
@@ -34,9 +34,9 @@ const CASSETTES_ROOT = join(__dirname, '../fixtures/cassettes');
 
 /**
  * True when the eval should run without a live LLM (no DeepInfra key) AND the
- * web layer is replaying cassettes — i.e. the offline eval context. Gating on
- * both keeps the stub out of unit tests (which exercise the live fetch path
- * against mocked `fetch`) and live runs (which have a real key or no
+ * web layer is replaying cassettes. That is the offline eval context. Gating
+ * on both keeps the stub out of unit tests (which exercise the live fetch
+ * path against mocked `fetch`) and live runs (which have a real key or no
  * cassette playback).
  */
 export function isDeterministicLLMMode(): boolean {

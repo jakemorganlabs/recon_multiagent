@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Search Agent Smoke Tests — Session S03
+# Search Agent smoke tests.
 #
 # Verifies:
 # 1. Northwind Robotics produces evidence with full provenance
 # 2. Budget enforcement caps search queries
-# 3. Injection resistance — poisoned text becomes evidence, not obeyed instruction
+# 3. Injection resistance: poisoned text becomes evidence, not obeyed instruction
 #
 # Requires: DATABASE_URL, DEEPINFRA_BASE_URL, DEEPINFRA_API_KEY, BRAVE_API_KEY
 
@@ -28,7 +28,7 @@ if [ -z "${DEEPINFRA_BASE_URL:-}" ] || [ -z "${DEEPINFRA_API_KEY:-}" ]; then
 fi
 
 if [ -z "${BRAVE_API_KEY:-}" ]; then
-  echo "WARNING: BRAVE_API_KEY not set — live search will fail"
+  echo "WARNING: BRAVE_API_KEY not set, live search will fail"
 fi
 
 # --- Use the compiled dist/search_agent.js via node to run a synthetic brief ---
@@ -135,7 +135,7 @@ const { persistEvidence } = require('$PROJECT_DIR/dist/evidence_writer.js');
     console.log('PASS: Evidence item validated against schema');
   } catch (e) {
     if (e.message.includes('constraint')) {
-      // run_id doesn't exist in DB for smoke test — that's expected
+      // run_id doesn't exist in DB for smoke test, that's expected
       console.log('PASS: Evidence schema validation passed (foreign key expected to fail in smoke)');
     } else {
       console.error('FAIL:', e.message);

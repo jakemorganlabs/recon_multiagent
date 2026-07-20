@@ -33,9 +33,9 @@ const dossier = {
   sections: {
     overview: {
       claims: [
-        // This claim is VALID — signal and evidence are real
+        // This claim is VALID. signal and evidence are real.
         { text: 'Northwind Robotics builds warehouse drones.', signal_ids: ['sig-1'] },
-        // This claim is POISONED — evidence_id is non-existent → recast as gap
+        // This claim is POISONED. evidence_id is non-existent, recast as gap.
         { text: 'Fake claim with missing evidence.', signal_ids: ['sig-bad'] },
       ],
     },

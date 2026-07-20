@@ -1,7 +1,7 @@
 /**
  * Verification harness (NOT a permanent test): runs the real eval runner
  * `main()` against an in-memory DB mock with cassette-play + no DeepInfra key,
- * proving the Eval Suite clears all thresholds offline — i.e. CI will be green.
+ * proving the Eval Suite clears all thresholds offline, so CI will be green.
  *
  * Mocked surface: src/db.js (getPool + every query the pipeline issues),
  * src/log.js (no-op logging), and the eval runner's resetDb (no-op).

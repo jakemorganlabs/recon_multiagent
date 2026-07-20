@@ -17,7 +17,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# DeepInfra Gemma rates (from config/pricing.json) — match model string exactly
+# DeepInfra Gemma rates (from config/pricing.json). Match model string exactly.
 # These are per-million-token rates. Updated 2026-07-09.
 INPUT_RATE="0.10"
 OUTPUT_RATE="0.20"

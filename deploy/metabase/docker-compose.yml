@@ -1,19 +1,19 @@
 version: "3.8"
 
 # Metabase on the ops VPS
-# Pinned to a current stable tag — bump deliberately.
+# Pinned to a current stable tag. Bump deliberately.
 # Binds 127.0.0.1:3000 only; never a public port.
 #
 # Access options (configurable by operator):
 #   (a) SSH port-forward: ssh -L 3000:127.0.0.1:3000 <vps>
 #   (b) Cloudflare Access-protected hostname (operator adds reverse proxy later)
 #
-# Env file: .env (not committed — operator creates from .env.example)
+# Env file: .env (not committed). Operator creates from .env.example.
 
 services:
   metabase:
     image: metabase/metabase:v0.52.4
-    # pinned — bump deliberately after reviewing Metabase release notes
+    # pinned. Bump deliberately after reviewing Metabase release notes.
     container_name: recon_metabase
     restart: unless-stopped
     ports:

@@ -19,7 +19,7 @@ interface QueryResult {
   rowCount?: number;
 }
 
-// Mock db.js — each test sets up pool.query via getPool mock.
+// Mock db.js. Each test sets up pool.query via getPool mock.
 vi.mock('../src/db.js', async () => {
   const queryMock = vi.fn().mockResolvedValue({ rows: [] } as QueryResult);
   return {

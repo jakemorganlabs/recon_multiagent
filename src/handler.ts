@@ -1,11 +1,9 @@
 /**
- * Request Handler Orchestration
+ * Request handler orchestration.
  *
- * Entrypoint for the n8n webhook trigger.
- * Sequences: HMAC verify → idempotency check → run creation → brief normalizer
- * → shared-state writes → structured logging → audit rows.
- *
- *
+ * Entrypoint for the n8n webhook trigger. Sequences: HMAC verify, idempotency
+ * check, run creation, brief normalizer, shared-state writes, structured
+ * logging, audit rows.
  */
 
 import { verifyRequestHmac } from './hmac.js';
@@ -21,17 +19,17 @@ import { normalizeBrief, type BriefNormalizerOptions } from './brief_normalizer.
 import { logCompleted, logError } from './log.js';
 
 export interface HandleRequestOptions {
-  /** HMAC secret */
+  /** HMAC secret. */
   hmacSecret: string;
-  /** HTTP method */
+  /** HTTP method. */
   method: string;
-  /** Request path */
+  /** Request path. */
   path: string;
-  /** Raw body string */
+  /** Raw body string. */
   body: string;
-  /** Authorization header value */
+  /** Authorization header value. */
   authorization: string;
-  /** DeepInfra / Gemma API options */
+  /** DeepInfra / Gemma API options. */
   normalizerOpts: BriefNormalizerOptions;
 }
 
@@ -43,7 +41,6 @@ export interface HandlerResult {
 export async function handleRequest(opts: HandleRequestOptions): Promise<HandlerResult> {
   const start = performance.now();
 
-  // --- Step 1: HMAC verification ---
   const hmacResult = verifyRequestHmac({
     secret: opts.hmacSecret,
     method: opts.method,
@@ -59,7 +56,6 @@ export async function handleRequest(opts: HandleRequestOptions): Promise<Handler
     };
   }
 
-  // Parse the request body
   let rawRequest: Record<string, unknown>;
   try {
     rawRequest = JSON.parse(opts.body) as Record<string, unknown>;
@@ -72,10 +68,8 @@ export async function handleRequest(opts: HandleRequestOptions): Promise<Handler
 
   const requestHash = deriveIdempotencyKey(rawRequest);
 
-  // --- Step 2: Idempotency guard ---
   const existingRun = await findRunByHash(requestHash);
   if (existingRun) {
-    // Audit the duplicate
     await writeAudit(existingRun.id, 'request_duplicate', {
       request_hash: requestHash,
       run_id: existingRun.id,
@@ -86,14 +80,12 @@ export async function handleRequest(opts: HandleRequestOptions): Promise<Handler
     };
   }
 
-  // --- Step 3: Create the run row ---
   const runId = await createRun(requestHash, rawRequest.target_name as string | undefined);
   await writeAudit(runId, 'run_created', {
     request_body: opts.body.slice(0, 500), // truncate for audit safety
     request_hash: requestHash,
   });
 
-  // --- Step 4: Brief Normalizer ---
   await updateRunStatus(runId, 'running');
   let briefResult: Awaited<ReturnType<typeof normalizeBrief>>;
   try {
@@ -116,7 +108,6 @@ export async function handleRequest(opts: HandleRequestOptions): Promise<Handler
     };
   }
 
-  // --- Step 5: Clarification path ---
   if (briefResult.result.clarify) {
     await updateRunStatus(runId, 'clarify');
     await writeAudit(runId, 'brief_clarify', {
@@ -136,7 +127,6 @@ export async function handleRequest(opts: HandleRequestOptions): Promise<Handler
     };
   }
 
-  // --- Step 6: Write the brief row ---
   const brief = briefResult.result.brief!;
   await createBrief(runId, brief);
   await updateRunStatus(runId, 'completed');

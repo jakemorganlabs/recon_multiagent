@@ -1,12 +1,12 @@
 /**
- * Cassette Infrastructure — Recorder & Player
+ * Cassette infrastructure: recorder & player.
  *
  * Intercepts web tool calls (search + fetch) and records them to disk
  * as versioned JSON (record mode) or replays from disk (play mode).
  *
- * CASSETTE_MODE=record  → writes every response to fixtures/cassettes/{case_id}/
- * CASSETTE_MODE=play    → serves from cassettes; returns empty on cache miss
- * CASSETTE_MODE=off     → passthrough to live web (default)
+ * CASSETTE_MODE=record  writes every response to fixtures/cassettes/{case_id}/
+ * CASSETTE_MODE=play    serves from cassettes; returns empty on cache miss
+ * CASSETTE_MODE=off     passthrough to live web (default)
  *
  *
  */

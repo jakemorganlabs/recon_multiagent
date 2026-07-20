@@ -105,7 +105,7 @@ describe('persistEvidenceBatch', () => {
         retrieval_rank: 2,
         fetched_at: '2024-07-04T16:00:00Z',
       },
-      // Bad item — hash mismatch
+      // Bad item, hash mismatch
       {
         evidence_id: 'ev-3',
         query: 'q3',

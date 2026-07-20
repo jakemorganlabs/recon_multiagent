@@ -1,12 +1,12 @@
 /**
- * Web Search Adapter
+ * Web search adapter.
  *
- * Thin wrapper around a search provider (Brave Search recommended for
- * portfolio cost). Attaches provenance, handles 429 with exponential
- * backoff, and treats thin/empty results as valid (empty array, not error).
+ * Thin wrapper around a search provider (Brave Search recommended for portfolio
+ * cost). Attaches provenance, handles 429 with exponential backoff, and treats
+ * thin or empty results as valid (empty array, not error).
  *
- *
- * extraction, but the search itself is a raw HTTP call to the provider.
+ * The search call is a raw HTTP call to the provider. Extraction happens
+ * downstream.
  */
 
 import { createHash } from 'node:crypto';
@@ -18,21 +18,21 @@ export interface SearchResult {
 }
 
 export interface SearchAdapterOptions {
-  /** Search provider API key (e.g., Brave Search API key) */
+  /** Search provider API key (Brave Search API key). */
   apiKey: string;
-  /** Provider base URL. Default: https://api.search.brave.com/res/v1/web/search */
+  /** Provider base URL. Default: https://api.search.brave.com/res/v1/web/search. */
   baseUrl?: string;
-  /** Max results to request per query. Default: 10 (overridden by budgets.json) */
+  /** Max results to request per query. Default 10, overridden by budgets.json. */
   count?: number;
-  /** Per-call timeout in ms. Default: 10000 */
+  /** Per-call timeout in ms. Default 10000. */
   timeoutMs?: number;
-  /** Max retries on 429 / network error. Default: 3 */
+  /** Max retries on 429 or network error. Default 3. */
   maxRetries?: number;
 }
 
 /**
  * Call the search provider and return results.
- * Empty or thin results return [] — never throw.
+ * Empty or thin results return []. Never throws.
  */
 export async function searchWeb(
   query: string,

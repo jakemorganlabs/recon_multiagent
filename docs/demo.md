@@ -1,12 +1,12 @@
-# Public Demo Plan
+# Public demo plan
 
 ## URL
 
 `https://recon.jakemorganlabs.dev`
 
-> **Status**: `__AFTER_DEPLOY__` — operator fills after n8n Cloud workflow is live.
+Status: `__AFTER_DEPLOY__`. Operator fills after the n8n Cloud workflow is live.
 
-## Rate Limiting
+## Rate limiting
 
 Before the demo URL is public, a Cloudflare WAF rate-limiting rule must be active:
 
@@ -20,26 +20,26 @@ Rate limit:
   source: IP
 ```
 
-This caps each IP to 10 requests per minute. The rule is intentionally strict — the demo is a portfolio showcase, not a production service.
+This caps each IP to 10 requests per minute. The rule is intentionally strict. The demo is a portfolio showcase, not a production service.
 
-## Demo Run
+## Demo run
 
-The demo runs on the synthetic **Northwind Robotics** target. The pipeline produces a dossier that is:
+The demo runs on the synthetic Northwind Robotics target. The pipeline produces a dossier that is:
 
-1. Rendered to markdown (`docs/samples/northwind_dossier.md`) — v1.0 scope.
+1. Rendered to markdown (`docs/samples/northwind_dossier.md`) for v1.0.
 2. Published at the demo URL via a static markdown renderer or n8n webhook response.
-3. Branded PDF is deferred to a future enhancement (S21).
+3. Branded PDF is deferred to a future enhancement.
 
-## Known Gaps Policy
+## Known gaps policy
 
 If any eval metric is red, the operator must either:
 
-- Fix the failure before going public (preferred), **or**
-- Ship a "known gaps" note alongside the report explaining the gap, the root cause, and the remediation plan.
+- Fix the failure before going public (preferred), or
+- Ship a "known gaps" note beside the report with the gap, the root cause, and the remediation plan.
 
 A reviewer meeting a silent failure first is the worst outcome.
 
-## Steps (operator field manual §8.3)
+## Steps
 
 1. Ensure S06 evals are green on `main`.
 2. Configure the n8n Cloud webhook trigger with the demo URL.

@@ -344,7 +344,7 @@ describe('Synthesis Agent', () => {
     const { getSignalsByRunId } = await import('../src/db.js');
     vi.mocked(getSignalsByRunId).mockResolvedValue(signals);
 
-    // Dossier has a claim with empty signal_ids — should fail validation
+    // Dossier has a claim with empty signal_ids, should fail validation
     const badDossier: Dossier = {
       executive_summary: 'Northwind Robotics.',
       sections: {
@@ -431,7 +431,7 @@ describe('Synthesis Agent', () => {
       executive_summary: 'Northwind Robotics is a drone company.',
       sections: {
         overview: { claims: [{ text: 'Northwind Robotics is a drone company.', signal_ids: ['sig-overview-1'] }] },
-        // Missing leadership and funding — should get auto-added
+        // Missing leadership and funding, should get auto-added
       },
       gaps: [
         { slot: 'leadership', reason: 'No signal available.' },

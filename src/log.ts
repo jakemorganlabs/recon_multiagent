@@ -1,19 +1,19 @@
 /**
- * Structured Logger
+ * Structured logger.
  *
- * Emits one JSON line per event to stdout.
- * Mandatory fields per S17.1: run_id, stage, status, latency_ms.
- * Optional per-stage extras: model_id, tokens, similarity_top, gate_fired.
+ * Emits one JSON line per event to stdout. Mandatory fields per S17.1:
+ * run_id, stage, status, latency_ms. Optional per-stage extras: model_id,
+ * tokens, similarity_top, gate_fired.
  *
  * Stages: request_trigger, brief_normalize, search_agent_turns, analyst,
- * coverage_check, synthesis, grounding_gate, persist.
- * (Per-component sub-stages — analyst_agent, search_agent, synthesis_agent,
- * dossier_writer, signal_writer, run_finalizer, pipeline, pipeline_end_to_end,
- * brief_clarify, brief_created — are also accepted so each component can log
- * its own lifecycle without colliding with the canonical pipeline stages.)
+ * coverage_check, synthesis, grounding_gate, persist. Per-component
+ * sub-stages (analyst_agent, search_agent, synthesis_agent, dossier_writer,
+ * signal_writer, run_finalizer, pipeline, pipeline_end_to_end, brief_clarify,
+ * brief_created) are also accepted so each component can log its own
+ * lifecycle without colliding with the canonical pipeline stages.
  *
- * Long fields (brief content, evidence text, dossier prose) truncated to 200 chars.
- * Full content belongs in the audit row, not the log line.
+ * Long fields (brief content, evidence text, dossier prose) truncated to 200
+ * chars. Full content belongs in the audit row, not the log line.
  */
 
 export interface LogEntry {

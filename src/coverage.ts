@@ -6,7 +6,7 @@
  *     brief's required slots.
  * (b) Invariant: the only loop counter is held here. It decrements from
  *     config.budgets.max_iterations toward zero. The model never decides
- *     when to stop — this function does.
+ *     when to stop. This function does.
  * (c) Deliberately does NOT: call any model, write to the DB, or modify
  *     evidence. Pure function over (brief, signals, iteration).
  */

@@ -1,7 +1,7 @@
 {
   "name": "recon-multiagent",
   "version": "1.0.0",
-  "description": "Recon — Multi-Agent Company Intelligence. Deterministic core, Search/Analyst/Synthesis agents, bounded coverage loop, deterministic grounding.",
+  "description": "Recon: Multi-Agent Company Intelligence. Deterministic core, Search/Analyst/Synthesis agents, bounded coverage loop, deterministic grounding.",
   "type": "module",
   "scripts": {
     "build": "tsc",

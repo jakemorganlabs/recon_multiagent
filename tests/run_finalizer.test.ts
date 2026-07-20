@@ -68,7 +68,7 @@ function makeDossier(claimsTotal: number, recastGaps: number): Dossier {
   };
 }
 
-describe('Run Finalizer — determineRunStatus', () => {
+describe('Run Finalizer: determineRunStatus', () => {
   it('returns complete when all claims verified', () => {
     expect(determineRunStatus(3, 3, 0)).toBe('complete');
   });
@@ -98,7 +98,7 @@ describe('Run Finalizer — determineRunStatus', () => {
   });
 });
 
-describe('Run Finalizer — finalizeRun', () => {
+describe('Run Finalizer: finalizeRun', () => {
   it('finalizes with complete status', async () => {
     const dossier = makeDossier(3, 0);
     const result = await finalizeRun({

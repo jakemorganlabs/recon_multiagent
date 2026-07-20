@@ -1,17 +1,16 @@
 /**
- * Synthesis Agent
+ * Synthesis Agent.
  *
- * The second agent SEALED from the open web by toolset construction.
- * Its ONLY tool is readSharedState (read signals + evidence by run_id).
- * There is no path by which it can fetch a new page.
+ * The second agent sealed from the open web by toolset construction. Its only
+ * tool is readSharedState (read signals and evidence by run_id); there is no
+ * path by which it can fetch a new page.
  *
- * Uses DeepInfra / Gemma 4 (google/gemma-4-26B-A4B-it).
- * Composes a Dossier from signals with explicit gap notes for unsupported slots.
- * NEVER introduces a fact not already in a signal.
+ * DeepInfra / Gemma 4 (google/gemma-4-26B-A4B-it). Composes a Dossier from
+ * signals with explicit gap notes for unsupported slots. Never introduces a
+ * fact not already in a signal.
  *
- * Dossier output is schema-validated against dossier.schema.json.
- * One-shot repair loop on schema failure.
- *
+ * Dossier output is schema-validated against dossier.schema.json. One-shot
+ * repair loop on schema failure.
  */
 
 import { readFileSync } from 'node:fs';
@@ -31,15 +30,15 @@ const ajv = new Ajv2020({ strict: false, allErrors: true });
 const validateDossier = ajv.compile(dossierSchema);
 
 export interface SynthesisAgentOptions {
-  /** DeepInfra base URL */
+  /** DeepInfra base URL. */
   baseUrl: string;
-  /** DeepInfra API key */
+  /** DeepInfra API key. */
   apiKey: string;
-  /** Override model (default from budgets.json) */
+  /** Override model. Default from budgets.json. */
   model?: string;
-  /** Temperature — always 0 */
+  /** Temperature. Always 0. */
   temperature?: number;
-  /** Max tokens for Synthesis response */
+  /** Max tokens for Synthesis response. */
   maxTokens?: number;
 }
 
@@ -148,7 +147,7 @@ export async function runSynthesisAgent(
         sections: {},
         gaps: brief.slots.map((s) => ({
           slot: s.slot_name,
-          reason: 'Could not verify — dossier schema validation failed after repair attempt.',
+          reason: 'Could not verify. Dossier schema validation failed after repair attempt.',
         })),
         grounding_passed: false,
       };
@@ -219,7 +218,7 @@ export async function runSynthesisAgent(
       sections: {},
       gaps: brief.slots.map((s) => ({
         slot: s.slot_name,
-        reason: 'Could not verify — synthesis agent encountered an error.',
+        reason: 'Could not verify. Synthesis agent encountered an error.',
       })),
       grounding_passed: false,
     };

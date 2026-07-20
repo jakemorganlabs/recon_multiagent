@@ -1,5 +1,5 @@
 /**
- * Generate Eval Fixtures — 30+ labeled cases with cassettes
+ * Generate eval fixtures: 30+ labeled cases with cassettes.
  *
  * Creates:
  * - fixtures/eval_cases/{rich,thin,empty,adversarial}/*.json

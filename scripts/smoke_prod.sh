@@ -98,7 +98,7 @@ if command -v jq >/dev/null 2>&1; then
 
   echo "✅ PASS: 200 + grounded dossier with citations and sections."
 else
-  echo "⚠️  jq not found — skipping JSON assertions. Install jq for deeper validation."
+  echo "⚠️  jq not found, skipping JSON assertions. Install jq for deeper validation."
   echo "Response body (first 1000 chars):"
   echo "$BODY_RESPONSE" | head -c 1000
 fi
