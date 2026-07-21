@@ -163,6 +163,6 @@ This is Piece IV: orchestration. Bounded specialist agents, a hard-capped loop, 
 
 Jake Morgan, [jakemorganlabs](https://github.com/jakemorganlabs)
 
-- Portfolio: `__OPERATOR__`
-- LinkedIn: `__OPERATOR__`
-- Contact: `__OPERATOR__`
+- Portfolio: [jakemorganlabs.dev](https://jakemorganlabs.dev)
+- LinkedIn: [linkedin.com/in/jakemorganlabs](https://www.linkedin.com/in/jakemorganlabs)
+- Contact: [jakemorganlabs@gmail.com](mailto:jakemorganlabs@gmail.com)
